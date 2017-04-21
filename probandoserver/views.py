@@ -9,7 +9,7 @@ def login_page(request):
         form=LoginForm(request.POST)
         if form.is_valid():
             username=request.POST['username']
-            password=request.POST['pasword']
+            password=request.POST['password']
             user=authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:

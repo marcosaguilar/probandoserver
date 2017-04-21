@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sgr',
+    'apps.usuario',
+    'apps.recurso',
 ]
+
+#--------------------AUTH--------------------
+AUTH_USER_MODEL = 'usuario.usuario'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,7 +86,7 @@ DATABASES = {
         'USER':'postgres',
         'PASSWORD':'postgres',
         'HOST':'localhost',
-        'PORT':'',
+        'PORT': 5432,
     }
 }
 
