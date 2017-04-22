@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',login_page,name="login_page"),
     url(r'^usuario/', include('apps.usuario.urls')),
+    url(r'^recurso/', include('apps.recurso.urls')),
 ]

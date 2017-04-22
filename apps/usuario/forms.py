@@ -1,6 +1,7 @@
 from django import forms
 
-from models import usuario
+from models import usuario, rol
+
 
 class UsuarioForm(forms.ModelForm):
 
@@ -16,16 +17,18 @@ class UsuarioForm(forms.ModelForm):
             'email',
             'telefono',
             'direccion',
+            'rol',
         ]
         labels = {
-            'username' : 'Nombre de usuario',
-            'password' : 'Contrasena',
+            'username': 'Nombre de usuario',
+            'password': 'Contrasena',
             'cedula': 'Cedula',
-            'nombres' : 'Nombres',
-            'apellidos' : 'Apellidos',
-            'email' : 'Email',
-            'telefono' : 'Telefono',
-            'direccion' : 'Direccion',
+            'nombres': 'Nombres',
+            'apellidos': 'Apellidos',
+            'email': 'Email',
+            'telefono': 'Telefono',
+            'direccion': 'Direccion',
+            'rol': 'Rol',
         }
         widgets = {
             'username': forms.TextInput(),
@@ -36,4 +39,28 @@ class UsuarioForm(forms.ModelForm):
             'email': forms.EmailInput(),
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput(),
+            'rol': forms.CheckboxSelectMultiple(),
+        }
+
+
+
+class CrearRolForm(forms.ModelForm):
+
+    class Meta:
+        model = rol
+
+        fields = [
+            'nombre',
+            'descripcion',
+            'permisos',
+        ]
+        labels = {
+            'nombre': 'Nombre del rol',
+            'descripcion': 'Descripcion',
+            'permisos': 'Permisos',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'descripcion': forms.TextInput(),
+            'permisos': forms.CheckboxSelectMultiple(),
         }
