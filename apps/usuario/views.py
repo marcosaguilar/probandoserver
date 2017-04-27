@@ -9,15 +9,15 @@ from forms import UsuarioForm, CrearRolForm
 def index(request):
     return render(request, 'usuario/index.html')
 
-def usuario_view(request):
+def crearUsuario_view(request):
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
             form.password = make_password(form.password)
             form.save()
-            #return redirect('login_page')
-        #return redirect('usuario: index')
+            return redirect('login_page')
+        return redirect('usuario: index')
     else:
         form = UsuarioForm()
 
