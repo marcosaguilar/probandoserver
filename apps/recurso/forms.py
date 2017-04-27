@@ -10,19 +10,19 @@ class CrearRecursoForm(forms.ModelForm):
 
         fields = [
             'nombre',
-            'estado',
-            'mantenimiento',
+            #'estado',
+            #'mantenimiento',
             'tipo',
         ]
         labels = {
             'nombre': 'Nombre del recurso o identificador',
-            'estado': 'Estado de disponibilidad',
-            'mantenimiento': 'Tipo de mantenimiento',
+            #'estado': 'Estado de disponibilidad',
+            #'mantenimiento': 'Tipo de mantenimiento',
             'tipo': 'Tipo de recurso',
         }
         widgets = {
             'nombre': forms.TextInput(),
-            'estado': forms.Select(),
-            'mantenimiento': forms.Select(),
+            #'estado': forms.Select(),
+            #'mantenimiento': forms.Select(),
             'tipo': forms.Select(),
         }
