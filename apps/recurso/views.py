@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from forms import CrearRecursoForm
 # Create your views here.
 
-from models import EstadoRecurso, Mantenimiento
+from models import EstadoRecurso#, Mantenimiento
 
 
 def index(request):
@@ -18,7 +18,7 @@ def crearRecurso_view(request):
         if form.is_valid():
             form = form.save(commit=False)
             form.estado = EstadoRecurso.objects.get(estado='Disponible')
-            form.mantenimiento = Mantenimiento.objects.get(estado='Sin tipo')
+            #form.mantenimiento = Mantenimiento.objects.get(estado='Sin tipo')
             form.save()
             return redirect('login_page')
         return redirect('usuario: index')
