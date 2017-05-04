@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-
-from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth.decorators import permission_required, login_required
 from forms import CrearRecursoForm
 # Create your views here.
 
@@ -12,6 +10,7 @@ def index(request):
     return render(request, 'usuario/index.html')
 
 
+@permission_required('recurso.add_recurso')
 def crearRecurso_view(request):
     if request.method == 'POST':
         form = CrearRecursoForm(request.POST)

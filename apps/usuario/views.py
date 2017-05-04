@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.hashers import make_password
-
 from forms import UsuarioForm, CrearRolForm
 # Create your views here.
 
@@ -11,11 +9,12 @@ def index(request):
 
 def crearUsuario_view(request):
     if request.method == 'POST':
-        form = UsuarioForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.password = make_password(form.password)
-            form.save()
+        f = UsuarioForm(request.POST)
+        if f.is_valid():
+            new_author = f.save(commit=False)
+            new_author.password = make_password(new_author.password)
+            new_author.save()
+            f._save_m2m()
             return redirect('login_page')
         return redirect('usuario: index')
     else:
