@@ -20,6 +20,6 @@ from probandoserver.views import login_page
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',login_page, name="login_page"),
-    url(r'^usuario/', include('apps.usuario.urls')),
-    url(r'^recurso/', include('apps.recurso.urls')),
+    url(r'^usuario/', include('usuario.urls')),
+    url(r'^recurso/', include('recurso.urls')),
 ]

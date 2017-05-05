@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from forms import UsuarioForm, CrearRolForm
+from models import rol, usuario
 # Create your views here.
 
 
@@ -15,6 +16,13 @@ def crearUsuario_view(request):
             new_author.password = make_password(new_author.password)
             new_author.save()
             f._save_m2m()
+            #guardar permisos en el usuario
+            objetorol = rol.objects.latest('nombre')
+            objetousuario = usuario.objects.latest('username')
+
+            for objetopermiso in objetorol.permisos.all():
+                objetousuario.user_permissions.add(objetopermiso)
+
             return redirect('login_page')
         return redirect('usuario: index')
     else:
