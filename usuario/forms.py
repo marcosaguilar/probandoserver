@@ -64,3 +64,25 @@ class CrearRolForm(forms.ModelForm):
             'permisos': forms.CheckboxSelectMultiple(),
             #'tipoRecurso': forms.Select(),
         }
+
+
+class ModificarRolForm(forms.ModelForm):
+
+    class Meta:
+        model = rol
+
+        fields = [
+            'nombre',
+            'permisos',
+            'tipoRecurso',
+        ]
+        labels = {
+            'nombre': 'Nombre del rol',
+            'permisos': 'Permisos',
+            'tipoRecurso':'Tipo de recurso',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'permisos': forms.CheckboxSelectMultiple(),
+            'tipoRecurso': forms.Select(),
+        }

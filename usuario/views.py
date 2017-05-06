@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
-from forms import UsuarioForm, CrearRolForm
+from forms import UsuarioForm, CrearRolForm, ModificarRolForm
 from models import rol, usuario
+from django.views.generic import UpdateView
+from django.core.urlresolvers import reverse_lazy
 # Create your views here.
 
 
@@ -43,3 +45,15 @@ def crearRol_view(request):
 
     return render(request,'usuario/crearrol_form.html', {'form': form})
 
+
+def modificarRol_view(request):
+    if request.method == 'POST':
+        form = ModificarRolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('modificar_rol')
+        #return redirect('usuario: index')
+    else:
+        form = ModificarRolForm()
+
+    return render(request,'usuario/crearrol_form.html', {'form': form})
