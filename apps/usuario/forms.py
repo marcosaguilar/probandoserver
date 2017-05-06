@@ -1,6 +1,6 @@
 from django import forms
-
-from models import usuario, rol
+from django.contrib.auth.models import Group
+from models import usuario
 
 
 class UsuarioForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class UsuarioForm(forms.ModelForm):
             'email',
             'telefono',
             'direccion',
-            'rol',
+            'groups',
         ]
         labels = {
             'username': 'Nombre de usuario',
@@ -28,7 +28,7 @@ class UsuarioForm(forms.ModelForm):
             'email': 'Email',
             'telefono': 'Telefono',
             'direccion': 'Direccion',
-            'rol': 'Rol',
+            'groups': 'Roles',
         }
         widgets = {
             'username': forms.TextInput(),
@@ -39,28 +39,59 @@ class UsuarioForm(forms.ModelForm):
             'email': forms.EmailInput(),
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput(),
-            'rol': forms.CheckboxSelectMultiple(),
+            'groups': forms.CheckboxSelectMultiple(),
         }
 
+class EditarUsuarioForm(forms.ModelForm):
 
+    class Meta:
+        model = usuario
+
+        fields = [
+
+            'cedula',
+            'nombres',
+            'apellidos',
+            'email',
+            'telefono',
+            'direccion',
+            'groups',
+        ]
+        labels = {
+
+            'cedula': 'Cedula',
+            'nombres': 'Nombres',
+            'apellidos': 'Apellidos',
+            'email': 'Email',
+            'telefono': 'Telefono',
+            'direccion': 'Direccion',
+            'groups': 'Roles',
+        }
+        widgets = {
+
+            'cedula': forms.NumberInput(),
+            'nombres': forms.TextInput(),
+            'apellidos': forms.TextInput(),
+            'email': forms.EmailInput(),
+            'telefono': forms.TextInput(),
+            'direccion': forms.TextInput(),
+            'groups': forms.CheckboxSelectMultiple(),
+        }
 
 class CrearRolForm(forms.ModelForm):
 
     class Meta:
-        model = rol
+        model = Group
 
         fields = [
-            'nombre',
-            'descripcion',
-            'permisos',
+            'name',
+            'permissions',
         ]
         labels = {
-            'nombre': 'Nombre del rol',
-            'descripcion': 'Descripcion',
-            'permisos': 'Permisos',
+            'name': 'Nombre del rol',
+            'permissions': 'Permisos',
         }
         widgets = {
-            'nombre': forms.TextInput(),
-            'descripcion': forms.TextInput(),
-            'permisos': forms.CheckboxSelectMultiple(),
+            'name': forms.TextInput(),
+            'permissions': forms.CheckboxSelectMultiple(),
         }

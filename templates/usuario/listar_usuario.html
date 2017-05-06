@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Username</td>
+            <td>Nombres</td>
+            <td>Apellidos</td>
+            <td>Email</td>
+            <td>Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if usuarios %}
+            {% for lista in usuarios %}
+            <tr>
+                <td>{{ lista.id }}</td>
+                <td>{{ lista.username }}</td>
+                <td>{{ lista.nombres }}</td>
+                <td>{{ lista.apellidos }}</td>
+                <td>{{ lista.email }}</td>
+                <td><a href="{% url 'usuario:editar_usuario' lista.id %}">Editar</a></td>
+                <td><a href="{% url 'usuario:eliminar_usuario' lista.id %}">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de usuarios</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

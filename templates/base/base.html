@@ -6,15 +6,20 @@
 </head>
 <body>
     {% block header %}
-        <h4></h4>
+
+    {% endblock %}
+    {% block sidebar %}
+        <p> <a href="{%  url 'home_page' %}">Inicio</a>
+            <a href="{%  url 'login_page' %}">Login</a>
+        </p>
     {% endblock %}
 
     {% block content %}
-        <h4></h4>
+
     {% endblock %}
 
     {% block footer %}
-        <h4></h4>
+
     {% endblock %}
 
 </body>
