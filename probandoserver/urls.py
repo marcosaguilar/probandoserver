@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from probandoserver.views import login_page
+from probandoserver.views import login_page, homepage
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$',login_page, name="login_page"),
-    url(r'^usuario/', include('apps.usuario.urls')),
+    url(r'^login',login_page, name="login_page"),
+    url(r'^$',homepage, name="home_page"),
+    url(r'^usuario/', include('apps.usuario.urls',namespace="usuario")),
     url(r'^recurso/', include('apps.recurso.urls')),
 ]

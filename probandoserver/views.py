@@ -26,3 +26,6 @@ def login_page(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'message': message, 'form': form})
+
+def homepage(request):
+    return render(request,'inicio.html')
