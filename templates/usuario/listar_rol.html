@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Nombre</td>
+            <td>Tipo de Recurso Asociado</td>
+            <td>Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if roles %}
+            {% for lista in roles %}
+            <tr>
+                <td>{{ lista.id }}</td>
+                <td>{{ lista.nombre }}</td>
+                <td>{{ lista.tipoRecurso.nombre }}</td>
+                <td><a href="{% url 'usuario:editar_rol' lista.id %}">Editar</a></td>
+                <td><a href="{% url 'usuario:eliminar_rol' lista.id %}">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de Roles</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

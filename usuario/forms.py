@@ -100,7 +100,7 @@ class CrearRolForm(forms.ModelForm):
         }
 
 
-class ModificarRolForm(forms.ModelForm):
+class EditarRolForm(forms.ModelForm):
 
     class Meta:
         model = rol

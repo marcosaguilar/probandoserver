@@ -1,0 +1,11 @@
+
+{% extends 'base/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <h2>Desea eliminar el registro de {{ var_recurso.nombre }}?</h2>
+    <button type="submit">Aceptar</button>
+    <a href="{%  url 'recurso:listar_recurso' %}">Cancelar</a>
+</form>
+{% endblock %}

@@ -25,3 +25,4 @@ class CrearRecursoForm(forms.ModelForm):
             #'mantenimiento': forms.Select(),
             'tipo': forms.Select(),
         }
+
