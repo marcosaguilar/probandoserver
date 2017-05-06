@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'usuario',
     'recurso',
+    #'django.contrib.admindocs',
 ]
 
 #--------------------AUTH--------------------

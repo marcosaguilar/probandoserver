@@ -6,14 +6,6 @@ from recurso.models import Tipo_de_recurso
 
 
 # Create your models here.
-"""
-class permiso(models.Model):
-    nombre = models.CharField(max_length=30)
-    descripcion = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return '{}'.format(self.nombre)
-"""
 
 
 class rol(models.Model):
@@ -24,11 +16,6 @@ class rol(models.Model):
 
     def __unicode__(self):
         return '{}'.format(self.nombre)
-
-
-
-#class Group2(Group):
-#    tipoRecurso = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
 
 
 class usuario(AbstractUser):

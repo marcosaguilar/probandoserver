@@ -1,3 +1,7 @@
+"""
+prueba de pydoc
+"""
+
 from __future__ import unicode_literals
 from django.db import models
 
@@ -20,6 +24,9 @@ class Tipo_de_recurso(models.Model):
 
 
 class recurso(models.Model):
+    """
+    este modelo genera recursos
+    """
     nombre = models.CharField(max_length=50)
     estado = models.ForeignKey(EstadoRecurso, null=True, blank=True, on_delete=models.CASCADE)
     #mantenimiento = models.ForeignKey(Mantenimiento, null=True, blank=True, on_delete=models.CASCADE)
