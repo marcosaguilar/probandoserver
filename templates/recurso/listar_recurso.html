@@ -19,6 +19,7 @@
                 <td>{{ lista.nombre }}</td>
                 <td>{{ lista.estado }}</td>
                 <td>{{ lista.tipo.nombre }}</td>
+                <td><a href="{% url 'recurso:editar_recurso' lista.id %}">Editar</a></td>
                 <td><a href="{% url 'recurso:eliminar_recurso' lista.id %}">Eliminar</a></td>
             </tr>
             {% endfor %}

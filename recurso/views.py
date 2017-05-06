@@ -29,6 +29,7 @@ def crearRecurso_view(request):
     return render(request,'recurso/crearRecurso_form.html', {'form': form})
 
 
+@permission_required('recurso.ver_recurso')
 def listarRecurso_view(request):
     """despliega una lista de recursos registrados en el sistema"""
     lista = recurso.objects.all().order_by('id')
@@ -36,6 +37,7 @@ def listarRecurso_view(request):
     return render(request,'recurso/listar_recurso.html', contexto)
 
 
+@permission_required('recurso.change_recurso')
 def editarRecurso_view(request, id_recurso):
     """permite modificar los atributos de un recurso"""
     var_recurso = recurso.objects.get(id=id_recurso)
@@ -49,6 +51,7 @@ def editarRecurso_view(request, id_recurso):
     return render(request, 'recurso/crearRecurso_form.html', {'form': form})
 
 
+@permission_required('recurso.delete_recurso')
 def eliminarRecurso_view(request, id_recurso):
     """borra un Recurso registrado de la base de datos del sistema"""
     var_recurso = recurso.objects.get(id=id_recurso)
