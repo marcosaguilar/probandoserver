@@ -1,6 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
+<<<<<<< HEAD:apps/usuario/views.py
 from forms import UsuarioForm, CrearRolForm,EditarUsuarioForm
+=======
+from forms import UsuarioForm, CrearRolForm, ModificarRolForm
+from models import rol, usuario
+from django.views.generic import UpdateView
+from django.core.urlresolvers import reverse_lazy
+>>>>>>> developerMA:usuario/views.py
 # Create your views here.
 from models import usuario
 
@@ -16,6 +23,13 @@ def crearUsuario_view(request):
             new_author.password = make_password(new_author.password)
             new_author.save()
             f._save_m2m()
+            #guardar permisos en el usuario
+            objetorol = rol.objects.latest('nombre')
+            objetousuario = usuario.objects.latest('username')
+
+            for objetopermiso in objetorol.permisos.all():
+                objetousuario.user_permissions.add(objetopermiso)
+
             return redirect('login_page')
         return redirect('usuario: index')
     else:
@@ -36,6 +50,7 @@ def crearRol_view(request):
 
     return render(request,'usuario/crearrol_form.html', {'form': form})
 
+<<<<<<< HEAD:apps/usuario/views.py
 def listarUsuario_view(request):
     """despliega una lista de usuarios registrados en el sistema"""
     lista = usuario.objects.all().order_by('id')
@@ -61,3 +76,17 @@ def eliminarUsuario_view(request, id_usuario):
         var_usuario.delete()
         return redirect('usuario:listar_usuario')
     return render(request,'usuario/eliminar_usuario.html', {'usuario_aux': var_usuario})
+=======
+
+def modificarRol_view(request):
+    if request.method == 'POST':
+        form = ModificarRolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('modificar_rol')
+        #return redirect('usuario: index')
+    else:
+        form = ModificarRolForm()
+
+    return render(request,'usuario/crearrol_form.html', {'form': form})
+>>>>>>> developerMA:usuario/views.py

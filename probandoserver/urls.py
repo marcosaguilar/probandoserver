@@ -19,8 +19,14 @@ from probandoserver.views import login_page, homepage
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+<<<<<<< HEAD
     url(r'^login',login_page, name="login_page"),
     url(r'^$',homepage, name="home_page"),
     url(r'^usuario/', include('apps.usuario.urls',namespace="usuario")),
     url(r'^recurso/', include('apps.recurso.urls')),
+=======
+    url(r'^$',login_page, name="login_page"),
+    url(r'^usuario/', include('usuario.urls')),
+    url(r'^recurso/', include('recurso.urls')),
+>>>>>>> developerMA
 ]

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import Group
-from models import usuario
+from models import usuario, rol
 
 
 class UsuarioForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class UsuarioForm(forms.ModelForm):
             'email',
             'telefono',
             'direccion',
-            'groups',
+            'rol',
         ]
         labels = {
             'username': 'Nombre de usuario',
@@ -28,7 +28,7 @@ class UsuarioForm(forms.ModelForm):
             'email': 'Email',
             'telefono': 'Telefono',
             'direccion': 'Direccion',
-            'groups': 'Roles',
+            'rol': 'Roles',
         }
         widgets = {
             'username': forms.TextInput(),
@@ -39,7 +39,7 @@ class UsuarioForm(forms.ModelForm):
             'email': forms.EmailInput(),
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput(),
-            'groups': forms.CheckboxSelectMultiple(),
+            'rol': forms.CheckboxSelectMultiple(),
         }
 
 class EditarUsuarioForm(forms.ModelForm):
@@ -81,17 +81,42 @@ class EditarUsuarioForm(forms.ModelForm):
 class CrearRolForm(forms.ModelForm):
 
     class Meta:
-        model = Group
+        model = rol
 
         fields = [
-            'name',
-            'permissions',
+            'nombre',
+            'permisos',
+            #'tipoRecurso',
         ]
         labels = {
-            'name': 'Nombre del rol',
-            'permissions': 'Permisos',
+            'nombre': 'Nombre del rol',
+            'permisos': 'Permisos',
+            #'tipoRecurso':'Tipo de recurso',
         }
         widgets = {
-            'name': forms.TextInput(),
-            'permissions': forms.CheckboxSelectMultiple(),
+            'nombre': forms.TextInput(),
+            'permisos': forms.CheckboxSelectMultiple(),
+            #'tipoRecurso': forms.Select(),
+        }
+
+
+class ModificarRolForm(forms.ModelForm):
+
+    class Meta:
+        model = rol
+
+        fields = [
+            'nombre',
+            'permisos',
+            'tipoRecurso',
+        ]
+        labels = {
+            'nombre': 'Nombre del rol',
+            'permisos': 'Permisos',
+            'tipoRecurso':'Tipo de recurso',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'permisos': forms.CheckboxSelectMultiple(),
+            'tipoRecurso': forms.Select(),
         }
