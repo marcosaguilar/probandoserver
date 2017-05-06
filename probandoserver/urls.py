@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^login',login_page, name="login_page"),
     url(r'^$',homepage, name="home_page"),
     url(r'^usuario/', include('usuario.urls',namespace="usuario")),
-    url(r'^recurso/', include('recurso.urls')),
+    url(r'^recurso/', include('recurso.urls',namespace="recurso")),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
-from forms import UsuarioForm, CrearRolForm, ModificarRolForm, EditarUsuarioForm
+from forms import UsuarioForm, CrearRolForm, EditarRolForm, EditarUsuarioForm
 from models import rol, usuario
 
 
@@ -9,6 +9,48 @@ from models import rol, usuario
 
 def index(request):
     return render(request, 'usuario/index.html')
+
+
+def crearRol_view(request):
+    if request.method == 'POST':
+        form = CrearRolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # return redirect('login_page')
+            # return redirect('usuario: index')
+    else:
+        form = CrearRolForm()
+
+    return render(request, 'usuario/crearrol_form.html', {'form': form})
+
+
+def listarRol_view(request):
+    lista = rol.objects.all().order_by('id')
+    contexto = {'roles': lista}
+    return render(request, 'usuario/listar_rol.html', contexto)
+
+def editarRol_view(request, id_rol):
+
+    var_rol = rol.objects.get(id=id_rol)
+    if request.method == 'GET':
+        form = EditarRolForm(instance=var_rol)
+    else:
+        form = EditarRolForm(request.POST, instance=var_rol)
+        if form.is_valid():
+            form.save()
+        return redirect('usuario:listar_rol')
+    return render(request, 'usuario/crearrol_form.html', {'form': form})
+
+def eliminarRol_view(request, id_rol):
+
+    var_rol = rol.objects.get(id=id_rol)
+    if request.method == 'POST':
+        var_rol.delete()
+        return redirect('usuario:listar_rol')
+    return render(request,'usuario/eliminar_rol.html', {'rol_aux': var_rol})
+
+
+
 
 def crearUsuario_view(request):
     if request.method == 'POST':
@@ -31,20 +73,6 @@ def crearUsuario_view(request):
         form = UsuarioForm()
 
     return render(request,'usuario/usuario_form.html', {'form': form})
-
-
-def crearRol_view(request):
-    if request.method == 'POST':
-        form = CrearRolForm(request.POST)
-        if form.is_valid():
-            form.save()
-            #return redirect('login_page')
-        #return redirect('usuario: index')
-    else:
-        form = CrearRolForm()
-
-    return render(request,'usuario/crearrol_form.html', {'form': form})
-
 
 def listarUsuario_view(request):
     """despliega una lista de usuarios registrados en el sistema"""
@@ -74,7 +102,7 @@ def eliminarUsuario_view(request, id_usuario):
         return redirect('usuario:listar_usuario')
     return render(request,'usuario/eliminar_usuario.html', {'usuario_aux': var_usuario})
 
-
+"""
 def modificarRol_view(request):
     if request.method == 'POST':
         form = ModificarRolForm(request.POST)
@@ -87,3 +115,4 @@ def modificarRol_view(request):
 
     return render(request,'usuario/crearrol_form.html', {'form': form})
 
+"""

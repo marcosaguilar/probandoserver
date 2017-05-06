@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Nombre</td>
+            <td>Estado</td>
+            <td>Tipo</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if recursos %}
+            {% for lista in recursos %}
+            <tr>
+                <td>{{ lista.id }}</td>
+                <td>{{ lista.nombre }}</td>
+                <td>{{ lista.estado }}</td>
+                <td>{{ lista.tipo.nombre }}</td>
+                <td><a href="{% url 'recurso:eliminar_recurso' lista.id %}">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de recursos</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
