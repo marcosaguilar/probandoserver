@@ -4,6 +4,7 @@ from django.db import models
 
 # Create your models here.
 class EstadoRecurso(models.Model):
+    """contiene los estados de un recurso"""
     estado = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
 
@@ -12,6 +13,7 @@ class EstadoRecurso(models.Model):
 
 
 class Tipo_de_recurso(models.Model):
+    """contiene los datos de un tipo de recurso, nombre y descripcion"""
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
 
@@ -20,6 +22,7 @@ class Tipo_de_recurso(models.Model):
 
 
 class recurso(models.Model):
+    """este modelo contiene los datos de un recurso, nombre, estado y tipo"""
     nombre = models.CharField(max_length=50)
     estado = models.ForeignKey(EstadoRecurso, null=True, blank=True, on_delete=models.CASCADE)
     #mantenimiento = models.ForeignKey(Mantenimiento, null=True, blank=True, on_delete=models.CASCADE)

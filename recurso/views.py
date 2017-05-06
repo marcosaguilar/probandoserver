@@ -13,6 +13,7 @@ def index(request):
 
 #@permission_required('recurso.add_recurso')
 def crearRecurso_view(request):
+    """crea un recurso en el sistema"""
     if request.method == 'POST':
         form = CrearRecursoForm(request.POST)
         if form.is_valid():
@@ -34,7 +35,7 @@ def listarRecurso_view(request):
     return render(request,'recurso/listar_recurso.html', contexto)
 
 def eliminarRecurso_view(request, id_recurso):
-    """borra un Recurso registrado en la base de datos del sistema"""
+    """borra un Recurso registrado de la base de datos del sistema"""
     var_recurso = recurso.objects.get(id=id_recurso)
     if request.method == 'POST':
         var_recurso.delete()

@@ -12,6 +12,7 @@ def index(request):
 
 
 def crearRol_view(request):
+    """crea un Rol en el sistema"""
     if request.method == 'POST':
         form = CrearRolForm(request.POST)
         if form.is_valid():
@@ -25,12 +26,13 @@ def crearRol_view(request):
 
 
 def listarRol_view(request):
+    """despliega una lista de los roles registrados en el sistema"""
     lista = rol.objects.all().order_by('id')
     contexto = {'roles': lista}
     return render(request, 'usuario/listar_rol.html', contexto)
 
 def editarRol_view(request, id_rol):
-
+    """permite modificar campos de un rol registrado en el sistema"""
     var_rol = rol.objects.get(id=id_rol)
     if request.method == 'GET':
         form = EditarRolForm(instance=var_rol)
@@ -42,7 +44,7 @@ def editarRol_view(request, id_rol):
     return render(request, 'usuario/crearrol_form.html', {'form': form})
 
 def eliminarRol_view(request, id_rol):
-
+    """elimina un rol registrado de la base de datos"""
     var_rol = rol.objects.get(id=id_rol)
     if request.method == 'POST':
         var_rol.delete()
@@ -53,6 +55,7 @@ def eliminarRol_view(request, id_rol):
 
 
 def crearUsuario_view(request):
+    """crea un usuario en el sistema"""
     if request.method == 'POST':
         f = UsuarioForm(request.POST)
         if f.is_valid():
@@ -82,7 +85,7 @@ def listarUsuario_view(request):
 
 
 def editarUsuario_view(request, id_usuario):
-    """permite modificar los atributos del modelo usuario"""
+    """permite modificar los atributos de un usuario"""
     var_usuario = usuario.objects.get(id=id_usuario)
     if request.method == 'GET':
         form = EditarUsuarioForm(instance=var_usuario)
@@ -95,7 +98,7 @@ def editarUsuario_view(request, id_usuario):
 
 
 def eliminarUsuario_view(request, id_usuario):
-    """borra un usuario registrado en la base de datos del sistema"""
+    """borra un usuario registrado de la base de datos del sistema"""
     var_usuario = usuario.objects.get(id=id_usuario)
     if request.method == 'POST':
         var_usuario.delete()

@@ -3,7 +3,7 @@ from models import recurso
 
 
 class CrearRecursoForm(forms.ModelForm):
-
+    """este formulario permite cargar los datos de recurso"""
     class Meta:
         model = recurso
 

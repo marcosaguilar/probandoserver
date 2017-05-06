@@ -4,7 +4,7 @@ from models import usuario, rol
 
 
 class UsuarioForm(forms.ModelForm):
-
+    """este formulario permite crear un usuario con los campos correspondientes"""
     class Meta:
         model = usuario
 
@@ -43,7 +43,7 @@ class UsuarioForm(forms.ModelForm):
         }
 
 class EditarUsuarioForm(forms.ModelForm):
-
+    """este form permite editar ciertos datos de un usuario"""
     class Meta:
         model = usuario
 
@@ -79,7 +79,7 @@ class EditarUsuarioForm(forms.ModelForm):
         }
 
 class CrearRolForm(forms.ModelForm):
-
+    """este form permite crear un rol con los campos correspondientes"""
     class Meta:
         model = rol
 
@@ -101,7 +101,7 @@ class CrearRolForm(forms.ModelForm):
 
 
 class EditarRolForm(forms.ModelForm):
-
+    """este form permite editar ciertos campos de un rol"""
     class Meta:
         model = rol
 
