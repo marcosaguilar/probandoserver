@@ -18,6 +18,9 @@ class rol(models.Model):
     def __unicode__(self):
         return '{}'.format(self.nombre)
 
+    def get_tipoRecurso(self):
+        return self.tipoRecurso
+
 
 class usuario(AbstractUser):
     """este modelo contiene los atributos de un usuario"""
@@ -33,3 +36,6 @@ class usuario(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','cedula']
+
+    def get_rol(self):
+        return self.rol

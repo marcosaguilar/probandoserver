@@ -4,6 +4,17 @@ from models import recurso
 
 class CrearRecursoForm(forms.ModelForm):
     """este formulario permite cargar los datos de recurso"""
+    #def __init__(self, *args, **kwargs):
+    #    self.listaderoles = []
+    #    super(CrearRecursoForm, self).__init__(*args, **kwargs)
+
+    #def pasarRol(self, request):
+        #listaderoles = []
+    #    for roles in request.user.rol.all():
+    #        self.listaderoles.append(roles)
+    #    self.fields['tipo'].queryset = tipo.objects.filter(supplier = self.listaderoles)
+    #    print (self.listaderoles)
+
     class Meta:
         model = recurso
 

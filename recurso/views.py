@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
 from forms import CrearRecursoForm, EditarRecursoForm
+from models import Tipo_de_recurso
 # Create your views here.
 
 from models import EstadoRecurso,recurso#, Mantenimiento
@@ -25,15 +26,26 @@ def crearRecurso_view(request):
         return redirect('recurso:listar_recurso')
     else:
         form = CrearRecursoForm()
+        listadetipos = []
+        for roles in request.user.rol.all():
+            listadetipos.append(roles.tipoRecurso.nombre)
+
+        form.fields["tipo"].queryset = Tipo_de_recurso.objects.filter(nombre__in = listadetipos)
 
     return render(request,'recurso/crearRecurso_form.html', {'form': form})
 
 
 @permission_required('recurso.ver_recurso')
 def listarRecurso_view(request):
-    """despliega una lista de recursos registrados en el sistema"""
-    lista = recurso.objects.all().order_by('id')
-    contexto = {'recursos':lista}
+    """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
+    lista = []
+    for roldelusuario in request.user.rol.all():
+        tiporecursodelusuario = roldelusuario.tipoRecurso
+        nuevalista = recurso.objects.filter(tipo=tiporecursodelusuario).order_by('id')
+        for elemento in nuevalista:
+            lista.append(elemento)
+
+    contexto = {'recursos': lista}
     return render(request,'recurso/listar_recurso.html', contexto)
 
 

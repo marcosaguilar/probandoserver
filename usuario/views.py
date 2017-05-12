@@ -64,8 +64,10 @@ def crearUsuario_view(request):
             new_author.save()
             f._save_m2m()
             #guardar permisos en el usuario
-            objetorol = rol.objects.latest('nombre')
-            objetousuario = usuario.objects.latest('username')
+            nombrederol = new_author.rol.all()[0].nombre
+            nombredeusuario = new_author.username
+            objetorol = rol.objects.get(nombre=nombrederol)
+            objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)
 
             for objetopermiso in objetorol.permisos.all():
                 objetousuario.user_permissions.add(objetopermiso)

@@ -24,6 +24,9 @@ class Tipo_de_recurso(models.Model):
     def __unicode__(self):
         return '{}'.format(self.nombre)
 
+    def get_nombre(self):
+        return self.nombre
+
 
 class recurso(models.Model):
     """este modelo contiene los datos de un recurso, nombre, estado y tipo"""
@@ -31,6 +34,7 @@ class recurso(models.Model):
     estado = models.ForeignKey(EstadoRecurso, null=True, blank=True, on_delete=models.CASCADE)
     #mantenimiento = models.ForeignKey(Mantenimiento, null=True, blank=True, on_delete=models.CASCADE)
     tipo = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
+
 
     class Meta:
         permissions = (
