@@ -12,7 +12,7 @@ def index(request):
 
 
 
-@permission_required('recurso.add_recurso')
+@permission_required('recurso.add_recurso', login_url='/login/')
 def crearRecurso_view(request):
     """crea un recurso en el sistema"""
     if request.method == 'POST':
@@ -26,16 +26,17 @@ def crearRecurso_view(request):
         return redirect('recurso:listar_recurso')
     else:
         form = CrearRecursoForm()
+        #filtrar solo los tipo de recurso que administra el usuario
         listadetipos = []
         for roles in request.user.rol.all():
-            listadetipos.append(roles.tipoRecurso.nombre)
-
-        form.fields["tipo"].queryset = Tipo_de_recurso.objects.filter(nombre__in = listadetipos)
+            if roles.tipoRecurso: #si es un rol con tipo de recurso, es decir un administrador de recursos
+                listadetipos.append(roles.tipoRecurso.nombre)
+        form.fields["tipo"].queryset = Tipo_de_recurso.objects.filter(nombre__in=listadetipos)
 
     return render(request,'recurso/crearRecurso_form.html', {'form': form})
 
 
-@permission_required('recurso.ver_recurso')
+@permission_required('recurso.ver_recurso', login_url='/login/')
 def listarRecurso_view(request):
     """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
     lista = []
@@ -49,7 +50,7 @@ def listarRecurso_view(request):
     return render(request,'recurso/listar_recurso.html', contexto)
 
 
-@permission_required('recurso.change_recurso')
+@permission_required('recurso.change_recurso', login_url='/login/')
 def editarRecurso_view(request, id_recurso):
     """permite modificar los atributos de un recurso"""
     var_recurso = recurso.objects.get(id=id_recurso)
@@ -63,7 +64,7 @@ def editarRecurso_view(request, id_recurso):
     return render(request, 'recurso/crearRecurso_form.html', {'form': form})
 
 
-@permission_required('recurso.delete_recurso')
+@permission_required('recurso.delete_recurso', login_url='/login/')
 def eliminarRecurso_view(request, id_recurso):
     """borra un Recurso registrado de la base de datos del sistema"""
     var_recurso = recurso.objects.get(id=id_recurso)

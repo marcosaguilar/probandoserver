@@ -5,10 +5,10 @@ from django.contrib.auth.models import Permission
 
 # Create your tests here.
 
-"""
+
 class RolTestCase(TestCase):
     def setUp(self):
-        permiso = Permission
+        permisos = Permission.objects
         rol.objects.create(nombre = "administrador de recursos", permisos = a1, tipoRecursos = "Resumen del libro")
 
     def test_libros_autor(self):
@@ -18,4 +18,3 @@ class RolTestCase(TestCase):
     def test_libros_puntuacion(self):
         libro2 = Libro.objects.get(titulo="El Quijote")
         self.assertEqual(libro2.get_puntuacion_media(), 0)
-"""
