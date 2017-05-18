@@ -1,5 +1,5 @@
 from django import forms
-from models import recurso
+from models import recurso, Mantenimiento
 
 
 class CrearRecursoForm(forms.ModelForm):
@@ -51,3 +51,28 @@ class EditarRecursoForm(forms.ModelForm):
             'tipo': forms.Select(),
         }
 
+
+class CrearMantenimientoForm(forms.ModelForm):
+    """este formulario permite cargar los datos del mantenimiento"""
+
+    class Meta:
+        model = Mantenimiento
+
+        fields = [
+            'nombre',
+            'descripcion',
+            'fechainicio',
+            'fechafin',
+        ]
+        labels = {
+            'nombre': 'Nombre del mantenimiento',
+            'descripcion': 'Descripcion del mantenimiento',
+            'fechainicio': 'Fecha de inicio',
+            'fechafin': 'Fecha de termino',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'descripcion': forms.TextInput(),
+            'fechainicio': forms.TextInput(),
+            'fechafin': forms.TextInput(),
+        }
