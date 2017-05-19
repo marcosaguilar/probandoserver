@@ -48,7 +48,8 @@ class EditarUsuarioForm(forms.ModelForm):
         model = usuario
 
         fields = [
-
+            'username',
+            'password',
             'cedula',
             'nombres',
             'apellidos',
@@ -58,7 +59,8 @@ class EditarUsuarioForm(forms.ModelForm):
             'rol',
         ]
         labels = {
-
+            'username': 'Nombre de usuario',
+            'password': 'Contrasena',
             'cedula': 'Cedula',
             'nombres': 'Nombres',
             'apellidos': 'Apellidos',
@@ -68,7 +70,8 @@ class EditarUsuarioForm(forms.ModelForm):
             'rol': 'Roles',
         }
         widgets = {
-
+            'username': forms.TextInput(),
+            'password': forms.PasswordInput(),
             'cedula': forms.NumberInput(),
             'nombres': forms.TextInput(),
             'apellidos': forms.TextInput(),

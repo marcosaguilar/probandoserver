@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from probandoserver.views import login_page, homepage
+from probandoserver.views import login_page, homepage, logout_page
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^$',homepage, name="home_page"),
     url(r'^usuario/', include('usuario.urls',namespace="usuario")),
     url(r'^recurso/', include('recurso.urls',namespace="recurso")),
+    url(r'^logout',logout_page, name="logout_page"),
 ]

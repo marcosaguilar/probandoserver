@@ -10,13 +10,16 @@ from recurso.models import Tipo_de_recurso
 
 class rol(models.Model):
     """este modelo contiene los atributos de un rol"""
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=50)
     #descripcion = models.CharField(max_length=100)
     permisos = models.ManyToManyField(Permission)
     tipoRecurso = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return '{}'.format(self.nombre)
+
+    def get_tipoRecurso(self):
+        return self.tipoRecurso
 
 
 class usuario(AbstractUser):
@@ -33,3 +36,6 @@ class usuario(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','cedula']
+
+    def get_rol(self):
+        return self.rol

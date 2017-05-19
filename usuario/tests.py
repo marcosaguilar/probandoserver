@@ -1,21 +1,20 @@
 from django.test import TestCase
 from usuario.models import usuario, rol
+from recurso.models import Tipo_de_recurso
 from django.contrib.auth.models import Permission
 
 
 # Create your tests here.
 
-"""
+
 class RolTestCase(TestCase):
     def setUp(self):
-        permiso = Permission
-        rol.objects.create(nombre = "administrador de recursos", permisos = a1, tipoRecursos = "Resumen del libro")
+        permisos = Permission.objects.all()
+        tipo=Tipo_de_recurso.objects.create(nombre="Laboratorio",descripcion="Sala de laboratorio")
+        rol1 = rol.objects.create(nombre = "administrador de recursos de laboratorio",tipoRecurso=tipo)
+        rol1.permisos.add(permisos[0])
 
-    def test_libros_autor(self):
-        libro1 = Libro.objects.get(titulo="Harry Potter")
-        self.assertEqual(libro1.autor.nombre, "J.K. Rowling")  
-
-    def test_libros_puntuacion(self):
-        libro2 = Libro.objects.get(titulo="El Quijote")
-        self.assertEqual(libro2.get_puntuacion_media(), 0)
-"""
+    def test_rol_descripcion(self):
+        rol1 = rol.objects.get(nombre="administrador de recursos de laboratorio")
+        tipo = Tipo_de_recurso.objects.get(nombre="Laboratorio")
+        self.assertEqual(rol1.tipoRecurso.descripcion, tipo.descripcion)

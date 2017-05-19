@@ -6,7 +6,6 @@ from models import rol, usuario
 
 # Create your views here.
 
-
 def index(request):
     return render(request, 'usuario/index.html')
 
@@ -63,12 +62,15 @@ def crearUsuario_view(request):
             new_author.password = make_password(new_author.password)
             new_author.save()
             f._save_m2m()
-            #guardar permisos en el usuario
-            objetorol = rol.objects.latest('nombre')
-            objetousuario = usuario.objects.latest('username')
+            #guardar permisos de los roles en el usuario
+            for unRol in new_author.rol.all():
+                nombrederol = unRol.nombre
+                nombredeusuario = new_author.username
+                objetorol = rol.objects.get(nombre=nombrederol)
+                objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)
 
-            for objetopermiso in objetorol.permisos.all():
-                objetousuario.user_permissions.add(objetopermiso)
+                for objetopermiso in objetorol.permisos.all():
+                    objetousuario.user_permissions.add(objetopermiso)
 
             return redirect('login_page')
         return redirect('usuario: index')
@@ -90,9 +92,27 @@ def editarUsuario_view(request, id_usuario):
     if request.method == 'GET':
         form = EditarUsuarioForm(instance=var_usuario)
     else:
-        form = EditarUsuarioForm(request.POST, instance=var_usuario)
-        if form.is_valid():
-            form.save()
+        f = EditarUsuarioForm(request.POST, instance=var_usuario)
+        if f.is_valid():
+            new_author = f.save(commit=False)
+            new_author.password = make_password(new_author.password)
+            new_author.save()
+            f._save_m2m()
+            # preparacion para guardar los permisos
+            nombredeusuario = new_author.username
+            objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)
+            #eliminar permisos antiguos
+            objetousuario.user_permissions.clear()
+            # guardar permisos en el usuario
+            for unRol in new_author.rol.all():
+                nombrederol = unRol.nombre
+                nombredeusuario = new_author.username
+                objetorol = rol.objects.get(nombre=nombrederol)
+                objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)
+
+                for objetopermiso in objetorol.permisos.all():
+                    objetousuario.user_permissions.add(objetopermiso)
+
         return redirect('usuario:listar_usuario')
     return render(request, 'usuario/usuario_form.html', {'form': form})
 
