@@ -1,11 +1,5 @@
 from django import forms
-<<<<<<< HEAD
 from models import recurso, Tipo_de_recurso, Mantenimiento
-=======
-
-from models import recurso, Tipo_de_recurso, Mantenimiento
-
->>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 
 
 class CrearRecursoForm(forms.ModelForm):
@@ -33,6 +27,7 @@ class CrearRecursoForm(forms.ModelForm):
             'tipo': forms.Select(),
         }
 
+
 class EditarRecursoForm(forms.ModelForm):
     """este formulario permite cargar los datos de recurso"""
     class Meta:
@@ -57,8 +52,8 @@ class EditarRecursoForm(forms.ModelForm):
             'tipo': forms.Select(),
         }
 
-<<<<<<< HEAD
-=======
+
+
 class CrearMantenimientoForm(forms.ModelForm):
     """este formulario permite cargar los datos de mantenimiento"""
     class Meta:
@@ -91,7 +86,6 @@ class CrearMantenimientoForm(forms.ModelForm):
             'recurso_id': forms.HiddenInput(),
         }
 
->>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 
 class CrearTipoRecursoForm(forms.ModelForm):
     """este formulario permite cargar los datos de un tipo de recurso para su creacion"""
@@ -111,11 +105,11 @@ class CrearTipoRecursoForm(forms.ModelForm):
             'descripcion': forms.TextInput(),
         }
 
-<<<<<<< HEAD
 
+"""
 class CrearMantenimientoForm(forms.ModelForm):
-    """este formulario permite cargar los datos del mantenimiento"""
-
+    """#este formulario permite cargar los datos del mantenimiento"""
+"""
     class Meta:
         model = Mantenimiento
 
@@ -137,5 +131,6 @@ class CrearMantenimientoForm(forms.ModelForm):
             'fechainicio': forms.TextInput(),
             'fechafin': forms.TextInput(),
         }
-=======
->>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
+"""
+
+
