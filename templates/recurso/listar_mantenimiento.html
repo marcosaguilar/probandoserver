@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Estado</td>
+            <td>Tipo de Mantenimiento</td>
+            <td>Descripcion</td>
+            <td>Fecha de inicio</td>
+            <td>Fecha de Finalizacion</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if mantenimientos %}
+            {% for lista in mantenimientos %}
+            <tr>
+                <td>{{ lista.id }}</td>
+                <td>{{ lista.estado }}</td>
+                <td>{{ lista.tipo }}</td>
+                <td>{{ lista.descripcion }}</td>
+                <td>{{ lista.fecha_inicio }}</td>
+                <td>{{ lista.fecha_fin }}</td>
+                <td><a href="{% url 'recurso:editar_mantenimiento' lista.id %}">Editar</a></td>
+
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de Roles</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
