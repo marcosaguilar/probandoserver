@@ -35,6 +35,11 @@ class Tipo_de_recurso(models.Model):
     def get_nombre(self):
         return self.nombre
 
+    class Meta:
+        permissions = (
+            ("ver_tipo_de_recurso", "Puede ver los tipos de recursos disponibles"),
+        )
+
 
 class recurso(models.Model):
     """este modelo contiene los datos de un recurso, nombre, estado y tipo"""

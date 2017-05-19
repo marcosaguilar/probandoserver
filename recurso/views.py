@@ -1,19 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
-<<<<<<< HEAD
-from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm
-=======
-from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm
-from models import Tipo_de_recurso, Mantenimiento
->>>>>>> developerMA
-# Create your views here.
+from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm, CrearTipoRecursoForm
+from models import Mantenimiento, EstadoRecurso, Tipo_de_recurso, recurso
 
-from models import EstadoRecurso, Tipo_de_recurso,recurso#, Mantenimiento
+# Create your views here.
 
 
 def index(request):
     return render(request, 'usuario/index.html')
-
 
 
 @permission_required('recurso.add_recurso', login_url='/login/')
@@ -77,7 +71,8 @@ def eliminarRecurso_view(request, id_recurso):
         return redirect('recurso:listar_recurso')
     return render(request,'recurso/eliminar_recurso.html', {'recurso_aux': var_recurso})
 
-<<<<<<< HEAD
+
+@permission_required('recurso.add_tipo_de_recurso', login_url='/login/')
 def crearTipo_Recurso_view(request):
     """crea un tipo de recurso en el sistema"""
     if request.method == 'POST':
@@ -93,6 +88,8 @@ def crearTipo_Recurso_view(request):
 
     return render(request,'recurso/crearTipoRecurso_form.html', {'form': form})
 
+
+@permission_required('recurso.ver_tipo_de_recurso', login_url='/login/')
 def listarTipoRecurso_view(request):
     """despliega una lista de tipos de recurso registrados en el sistema"""
     lista1 = Tipo_de_recurso.objects.all().order_by('id')
@@ -100,8 +97,7 @@ def listarTipoRecurso_view(request):
     return render(request,'recurso/listar_tiporecurso.html', contexto1)
 
 
-
-
+@permission_required('recurso.delete_tipo_de_recurso', login_url='/login/')
 def eliminarTipoRecurso_view(request, id_Tipo_de_recurso):
     """borra un Tipo de Recurso registrado de la base de datos del sistema"""
     var_Tipo_de_recurso = Tipo_de_recurso.objects.get(id=id_Tipo_de_recurso)
@@ -109,7 +105,7 @@ def eliminarTipoRecurso_view(request, id_Tipo_de_recurso):
         var_Tipo_de_recurso.delete()
         return redirect('recurso:listar_tiporecurso')
     return render(request,'recurso/eliminar_tiporecurso.html', {'Tipo_de_recurso_aux': var_Tipo_de_recurso})
-=======
+
 
 def crearMantenimiento_view(request):
     """crea un registro del mantenimiento en el sistema"""
@@ -140,4 +136,4 @@ def eliminarMantenimiento_view(request, id_mantenimiento):
         return redirect('recurso:listar_mantenimiento')
     return render(request,'recurso/eliminar_mantenimiento.html', {'mantenimiento_aux': var_mantenimiento})
 
->>>>>>> developerMA
+
