@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Nombre</td>
+            <td>Descripcion</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if tipos %}
+            {% for lista1 in tipos %}
+            <tr>
+                <td>{{ lista1.id }}</td>
+                <td>{{ lista1.nombre }}</td>
+                <td>{{ lista1.descripcion }}</td>
+                <td><a href="{% url 'recurso:eliminar_tiporecurso' lista1.id %}">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de tipos de recurso</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

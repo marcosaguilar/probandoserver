@@ -1,5 +1,5 @@
 from django import forms
-from models import recurso
+from models import recurso, Tipo_de_recurso
 
 
 class CrearRecursoForm(forms.ModelForm):
@@ -50,3 +50,21 @@ class EditarRecursoForm(forms.ModelForm):
             'tipo': forms.Select(),
         }
 
+class CrearTipoRecursoForm(forms.ModelForm):
+    """este formulario permite cargar los datos de un tipo de recurso para su creacion"""
+    class Meta:
+        model = Tipo_de_recurso
+
+        fields = [
+            'nombre',
+            'descripcion',
+        ]
+        labels = {
+            'nombre': 'Nombre del tipo de recurso',
+
+            'descripcion': 'describa el tipo de recurso',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'descripcion': forms.TextInput(),
+        }
