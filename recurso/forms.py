@@ -1,5 +1,7 @@
 from django import forms
-from models import recurso, Mantenimiento
+
+from models import recurso, Tipo_de_recurso, Mantenimiento
+
 
 
 class CrearRecursoForm(forms.ModelForm):
@@ -82,4 +84,23 @@ class CrearMantenimientoForm(forms.ModelForm):
             'recurso_id': forms.HiddenInput(),
         }
 
+
+class CrearTipoRecursoForm(forms.ModelForm):
+    """este formulario permite cargar los datos de un tipo de recurso para su creacion"""
+    class Meta:
+        model = Tipo_de_recurso
+
+        fields = [
+            'nombre',
+            'descripcion',
+        ]
+        labels = {
+            'nombre': 'Nombre del tipo de recurso',
+
+            'descripcion': 'describa el tipo de recurso',
+        }
+        widgets = {
+            'nombre': forms.TextInput(),
+            'descripcion': forms.TextInput(),
+        }
 

@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
-from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm
+
+from forms import  CrearMantenimientoForm
+
+
+from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso
+from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm
 # Create your views here.
 
-from models import EstadoRecurso,recurso, Mantenimiento
 
 
 def index(request):
@@ -19,6 +23,9 @@ def crearRecurso_view(request):
         if form.is_valid():
             form = form.save(commit=False)
             form.estado = EstadoRecurso.objects.get(estado='Disponible')
+            #form.estado = EstadoRecurso.objects.get(estado='Disponible')
+            #form.mantenimiento = Mantenimiento.objects.get(estado='Sin tipo')
+
             form.save()
             return redirect('login_page')
         return redirect('recurso:listar_recurso')
@@ -91,3 +98,36 @@ def listarAsignarMantenimiento_view(request):
     lista = recurso.objects.all().order_by('id')
     contexto = {'recursos': lista}
     return render(request, 'recurso/listar_asignar_man.html', contexto)
+
+def crearTipo_Recurso_view(request):
+    """crea un tipo de recurso en el sistema"""
+    if request.method == 'POST':
+        form = CrearTipoRecursoForm(request.POST)
+        if form.is_valid():
+            #form = form.save(commit=False)
+
+            form.save()
+            return redirect('home_page')
+        return redirect('login_page')
+    else:
+        form = CrearTipoRecursoForm()
+
+    return render(request,'recurso/crearTipoRecurso_form.html', {'form': form})
+
+def listarTipoRecurso_view(request):
+    """despliega una lista de tipos de recurso registrados en el sistema"""
+    lista1 = Tipo_de_recurso.objects.all().order_by('id')
+    contexto1 = {'tipos':lista1}
+    return render(request,'recurso/listar_tiporecurso.html', contexto1)
+
+
+
+
+def eliminarTipoRecurso_view(request, id_Tipo_de_recurso):
+    """borra un Tipo de Recurso registrado de la base de datos del sistema"""
+    var_Tipo_de_recurso = Tipo_de_recurso.objects.get(id=id_Tipo_de_recurso)
+    if request.method == 'POST':
+        var_Tipo_de_recurso.delete()
+        return redirect('recurso:listar_tiporecurso')
+    return render(request,'recurso/eliminar_tiporecurso.html', {'Tipo_de_recurso_aux': var_Tipo_de_recurso})
+

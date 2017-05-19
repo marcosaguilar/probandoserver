@@ -8,6 +8,7 @@
             <tr>
                 <td>Usuario</td>
                 <td>Recurso</td>
+                <td>Tipo de Recurso</td>
                 <td>Roles</td>
                 <td>Mantenimiento</td>
             </tr>
@@ -30,6 +31,13 @@
                 </td>
                 <td>
                     <ul>
+                        <li><a href="{%  url 'recurso:crear_tipo_recurso' %}">Crear</a></li>
+                        <li><a href="{%  url 'recurso:listar_tiporecurso' %}">Eliminar</a></li>
+
+                    </ul>
+                </td>
+                <td>
+                    <ul>
                         <li><a href="{%  url 'usuario:crearRol_crear' %}">Crear</a></li>
                         <li><a href="{%  url 'usuario:listar_rol' %}">Editar</a></li>
                         <li><a href="{%  url 'usuario:listar_rol' %}">Eliminar</a></li>
@@ -42,6 +50,7 @@
 
                     </ul>
                 </td>
+
             </tr>
 
         </tbody>
