@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+
+{% extends 'base/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <h2>Desea eliminar el registro de {{ var_tipo.nombre }}?</h2>
+    <button type="submit">Aceptar</button>
+    <a href="{%  url 'recurso:listar_tiporecurso' %}">Cancelar</a>
+</form>
+{% endblock %}
