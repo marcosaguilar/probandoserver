@@ -7,8 +7,9 @@
         <tr>
             <td>ID</td>
             <td>Nombre</td>
-            <td>Estado</td>
             <td>Tipo</td>
+            <td>Tipo de Mantenimiento</td>
+            <td>Estado de Mantenimiento</td>
         </tr>
     </thead>
     <tbody>
@@ -17,11 +18,14 @@
             <tr>
                 <td>{{ lista.id }}</td>
                 <td>{{ lista.nombre }}</td>
-                <td>{{ lista.estado }}</td>
                 <td>{{ lista.tipo.nombre }}</td>
-                <td><a href="{% url 'recurso:editar_recurso' lista.id %}">Editar</a></td>
-                <td><a href="{% url 'recurso:eliminar_recurso' lista.id %}">Eliminar</a></td>
-
+                {% if lista.mantenimiento is None %}
+                <td>ninguno</td>
+                <td>ninguno</td>
+                {% else  %}
+                <td>{{ lista.mantenimiento.tipo }}</td>
+                <td>{{ lista.mantenimiento.estado }}</td>
+                {% endif %}
             </tr>
             {% endfor %}
         {% else %}

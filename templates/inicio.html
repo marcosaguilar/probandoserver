@@ -9,6 +9,7 @@
                 <td>Usuario</td>
                 <td>Recurso</td>
                 <td>Roles</td>
+                <td>Mantenimiento</td>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,13 @@
                         <li><a href="{%  url 'usuario:crearRol_crear' %}">Crear</a></li>
                         <li><a href="{%  url 'usuario:listar_rol' %}">Editar</a></li>
                         <li><a href="{%  url 'usuario:listar_rol' %}">Eliminar</a></li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li><a href="{%  url 'recurso:listar_asignar_man' %}">Asignar mantenimiento</a></li>
+                        <li><a href="{%  url 'recurso:listar_rec_man' %}">Mostrar</a></li>
+
                     </ul>
                 </td>
             </tr>
