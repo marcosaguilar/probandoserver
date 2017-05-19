@@ -14,14 +14,17 @@
     <tbody>
         {% if recursos %}
             {% for lista in recursos %}
+
             <tr>
                 <td>{{ lista.id }}</td>
                 <td>{{ lista.nombre }}</td>
                 <td>{{ lista.estado }}</td>
                 <td>{{ lista.tipo.nombre }}</td>
-                <td><a href="{% url 'recurso:editar_recurso' lista.id %}">Editar</a></td>
-                <td><a href="{% url 'recurso:eliminar_recurso' lista.id %}">Eliminar</a></td>
-
+                {% if lista.mantenimiento is None %}
+                <td><a href="{% url 'recurso:crear_mantenimiento' lista.id %}">Mantenimiento</a></td>
+                {% else %}
+                 <td><p>Ya tiene asignado un mantenimiento</p></td>
+                {%endif %}
             </tr>
             {% endfor %}
         {% else %}

@@ -1,24 +1,42 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
+<<<<<<< HEAD
 from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm, CrearTipoRecursoForm
 from models import Mantenimiento, EstadoRecurso, Tipo_de_recurso, recurso
 
 # Create your views here.
+=======
+
+from forms import  CrearMantenimientoForm
+
+
+from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso
+from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm
+# Create your views here.
+
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 
 
 def index(request):
     return render(request, 'usuario/index.html')
 
 
+<<<<<<< HEAD
 @permission_required('recurso.add_recurso', login_url='/login/')
+=======
+
+#@permission_required('recurso.add_recurso')
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 def crearRecurso_view(request):
     """crea un recurso en el sistema"""
     if request.method == 'POST':
         form = CrearRecursoForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
+            form.estado = EstadoRecurso.objects.get(estado='Disponible')
             #form.estado = EstadoRecurso.objects.get(estado='Disponible')
             #form.mantenimiento = Mantenimiento.objects.get(estado='Sin tipo')
+
             form.save()
             return redirect('login_page')
         return redirect('recurso:listar_recurso')
@@ -34,7 +52,11 @@ def crearRecurso_view(request):
     return render(request,'recurso/crearRecurso_form.html', {'form': form})
 
 
+<<<<<<< HEAD
 @permission_required('recurso.ver_recurso', login_url='/login/')
+=======
+#@permission_required('recurso.ver_recurso')
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 def listarRecurso_view(request):
     """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
     lista = []
@@ -48,7 +70,11 @@ def listarRecurso_view(request):
     return render(request,'recurso/listar_recurso.html', contexto)
 
 
+<<<<<<< HEAD
 @permission_required('recurso.change_recurso', login_url='/login/')
+=======
+#@permission_required('recurso.change_recurso')
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 def editarRecurso_view(request, id_recurso):
     """permite modificar los atributos de un recurso"""
     var_recurso = recurso.objects.get(id=id_recurso)
@@ -62,7 +88,11 @@ def editarRecurso_view(request, id_recurso):
     return render(request, 'recurso/crearRecurso_form.html', {'form': form})
 
 
+<<<<<<< HEAD
 @permission_required('recurso.delete_recurso', login_url='/login/')
+=======
+#@permission_required('recurso.delete_recurso')
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 def eliminarRecurso_view(request, id_recurso):
     """borra un Recurso registrado de la base de datos del sistema"""
     var_recurso = recurso.objects.get(id=id_recurso)
@@ -72,7 +102,42 @@ def eliminarRecurso_view(request, id_recurso):
     return render(request,'recurso/eliminar_recurso.html', {'recurso_aux': var_recurso})
 
 
+<<<<<<< HEAD
 @permission_required('recurso.add_tipo_de_recurso', login_url='/login/')
+=======
+
+def crearMantenimiento_view(request, id_recurso):
+    if request.method == 'POST':
+        form = CrearMantenimientoForm(request.POST)
+        if form.is_valid():
+            man = form.save(commit=False)
+            man.estado = "A realizar"
+            man.cod_recurso = id_recurso
+            man.save()
+            var_recurso = recurso.objects.get(id=id_recurso)
+            form1 = EditarRecursoForm(instance=var_recurso)
+            rec = form1.save(commit=False)
+            rec.mantenimiento = Mantenimiento.objects.get(cod_recurso=id_recurso)
+            rec.save()
+            return redirect('recurso:listar_rec_man')
+
+        return redirect('recurso:listar_recurso')
+    else:
+        form = CrearMantenimientoForm()
+
+    return render(request,'recurso/crearMantenimiento_form.html', {'form': form})
+
+def listarMantenimiento_view(request):
+    lista = recurso.objects.all().order_by('id')
+    contexto = {'recursos':lista}
+    return render(request,'recurso/listar_rec_man.html', contexto)
+
+def listarAsignarMantenimiento_view(request):
+    lista = recurso.objects.all().order_by('id')
+    contexto = {'recursos': lista}
+    return render(request, 'recurso/listar_asignar_man.html', contexto)
+
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e
 def crearTipo_Recurso_view(request):
     """crea un tipo de recurso en el sistema"""
     if request.method == 'POST':
@@ -106,6 +171,7 @@ def eliminarTipoRecurso_view(request, id_Tipo_de_recurso):
         return redirect('recurso:listar_tiporecurso')
     return render(request,'recurso/eliminar_tiporecurso.html', {'Tipo_de_recurso_aux': var_Tipo_de_recurso})
 
+<<<<<<< HEAD
 
 def crearMantenimiento_view(request):
     """crea un registro del mantenimiento en el sistema"""
@@ -137,3 +203,5 @@ def eliminarMantenimiento_view(request, id_mantenimiento):
     return render(request,'recurso/eliminar_mantenimiento.html', {'mantenimiento_aux': var_mantenimiento})
 
 
+=======
+>>>>>>> 5f4e0dce1050b8d0da6ae6523ecda450357b4c4e

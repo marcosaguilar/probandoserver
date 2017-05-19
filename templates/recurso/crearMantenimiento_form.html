@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    tipo de mantenimiento : {{ form.tipo }} </br>
+    Descripcion : {{ form.descripcion }} </br>
+    fecha de inicio : {{ form.fecha_inicio }} </br>
+    fecha de fin : {{ form.fecha_fin }} </br>
+
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}
