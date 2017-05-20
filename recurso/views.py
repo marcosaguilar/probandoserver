@@ -1,16 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import permission_required, login_required
-<<<<<<< HEAD
-from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm, CrearTipoRecursoForm
-from models import EstadoRecurso, recurso, Mantenimiento, Tipo_de_recurso
-=======
-
-from forms import  CrearMantenimientoForm
-
-
+from django.contrib.auth.decorators import permission_required
 from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso
-from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm,EditarMantenimientoForm
->>>>>>> 0f588a8d85236ba872404ed03523efd5e77f98a2
+from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm, EditarMantenimientoForm, CrearMantenimientoForm
+
 # Create your views here.
 
 
@@ -169,35 +161,5 @@ def eliminarTipoRecurso_view(request, id_Tipo_de_recurso):
         var_Tipo_de_recurso.delete()
         return redirect('recurso:listar_tiporecurso')
     return render(request,'recurso/eliminar_tiporecurso.html', {'Tipo_de_recurso_aux': var_Tipo_de_recurso})
-
-
-#def crearMantenimiento_view(request):
-#    """crea un registro del mantenimiento en el sistema"""
-#    if request.method == 'POST':
-#        form = CrearMantenimientoForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            return redirect('login_page')
-#        return redirect('login_page')
-#    else:
-#        form = CrearMantenimientoForm()
-
-#    return render(request,'recurso/crearRecurso_form.html', {'form': form})
-
-
-#def listarMantenimiento_view(request):
-#    """despliega la lista de mantenimientos registrados en el sistema"""
-#    lista = Mantenimiento.objects.all().order_by('id')
-#    contexto = {'recursos':lista}
-#    return render(request,'recurso/listar_mantenimiento.html', contexto)
-
-
-#def eliminarMantenimiento_view(request, id_mantenimiento):
-#    """borra un mantenimiento registrado de la base de datos del sistema"""
-#    var_mantenimiento = Mantenimiento.objects.get(id=id_mantenimiento)
-#    if request.method == 'POST':
-#        var_mantenimiento.delete()
-#        return redirect('recurso:listar_mantenimiento')
-#    return render(request,'recurso/eliminar_mantenimiento.html', {'mantenimiento_aux': var_mantenimiento})
 
 
