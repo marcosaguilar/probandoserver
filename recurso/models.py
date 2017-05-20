@@ -12,6 +12,7 @@ class tipoMantenimiento(models.Model):
     def __unicode__(self):
         return '{}'.format(self.nombre)
 
+
 class Mantenimiento(models.Model):
     """contiene los datos del mantenimiento, como la fecha y la descripcion del mismo"""
     estado = models.CharField(max_length=50, null=True, blank=True)#a realizar, en curso, terminado

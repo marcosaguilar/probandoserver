@@ -10,20 +10,14 @@ class CrearRecursoForm(forms.ModelForm):
 
         fields = [
             'nombre',
-            #'estado',
-            #'mantenimiento',
             'tipo',
         ]
         labels = {
             'nombre': 'Nombre del recurso o identificador',
-            #'estado': 'Estado de disponibilidad',
-            #'mantenimiento': 'Tipo de mantenimiento',
             'tipo': 'Tipo de recurso',
         }
         widgets = {
             'nombre': forms.TextInput(),
-            #'estado': forms.Select(),
-            #'mantenimiento': forms.Select(),
             'tipo': forms.Select(),
         }
 
@@ -104,33 +98,4 @@ class CrearTipoRecursoForm(forms.ModelForm):
             'nombre': forms.TextInput(),
             'descripcion': forms.TextInput(),
         }
-
-
-"""
-class CrearMantenimientoForm(forms.ModelForm):
-    """#este formulario permite cargar los datos del mantenimiento"""
-"""
-    class Meta:
-        model = Mantenimiento
-
-        fields = [
-            'nombre',
-            'descripcion',
-            'fechainicio',
-            'fechafin',
-        ]
-        labels = {
-            'nombre': 'Nombre del mantenimiento',
-            'descripcion': 'Descripcion del mantenimiento',
-            'fechainicio': 'Fecha de inicio',
-            'fechafin': 'Fecha de termino',
-        }
-        widgets = {
-            'nombre': forms.TextInput(),
-            'descripcion': forms.TextInput(),
-            'fechainicio': forms.TextInput(),
-            'fechafin': forms.TextInput(),
-        }
-"""
-
 
