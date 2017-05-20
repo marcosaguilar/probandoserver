@@ -2,8 +2,8 @@ from django.conf.urls import url
 
 
 from views import index, crearMantenimiento_view, listarRecursoMantenimiento_view,listarAsignarMantenimiento_view
-from views import  crearTipo_Recurso_view, listarTipoRecurso_view, eliminarTipoRecurso_view
-from views import  crearRecurso_view,listarRecurso_view,eliminarRecurso_view,editarRecurso_view,editarMantenimiento_view
+from views import crearTipo_Recurso_view, listarTipoRecurso_view, eliminarTipoRecurso_view
+from views import crearRecurso_view,listarRecurso_view,eliminarRecurso_view,editarRecurso_view,editarMantenimiento_view
 from views import listarMantenimiento_view
 
 urlpatterns = [

@@ -36,7 +36,7 @@ class EditarRecursoForm(forms.ModelForm):
         labels = {
             'nombre': 'Nombre del recurso o identificador',
             'estado': 'Estado de disponibilidad',
-            'mantenimiento': 'Tipo de mantenimiento',
+            'mantenimiento': 'Mantenimiento',
             'tipo': 'Tipo de recurso',
         }
         widgets = {
@@ -72,13 +72,14 @@ class CrearMantenimientoForm(forms.ModelForm):
         }
         widgets = {
             'nombre': forms.TextInput(),
-            'estado': forms.TextInput(),
+            'estado': forms.Select(),
             'tipo': forms.Select(),
             'descripcion': forms.TextInput(),
             'fecha_inicio': forms.TextInput(),
             'fecha_fin': forms.TextInput(),
             'recurso_id': forms.HiddenInput(),
         }
+
 
 class EditarMantenimientoForm(forms.ModelForm):
     """este formulario permite cargar los datos de mantenimiento"""
@@ -104,7 +105,7 @@ class EditarMantenimientoForm(forms.ModelForm):
         }
         widgets = {
             'nombre': forms.TextInput(),
-            'estado': forms.TextInput(),
+            'estado': forms.Select(),
             'tipo': forms.Select(),
             'descripcion': forms.TextInput(),
             'fecha_inicio': forms.TextInput(),

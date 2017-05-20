@@ -21,6 +21,11 @@ class rol(models.Model):
     def get_tipoRecurso(self):
         return self.tipoRecurso
 
+    class Meta:
+        permissions = (
+            ("ver_rol", "Puede ver los roles disponibles"),
+        )
+
 
 class usuario(AbstractUser):
     """este modelo contiene los atributos de un usuario"""
@@ -39,3 +44,8 @@ class usuario(AbstractUser):
 
     def get_rol(self):
         return self.rol
+
+    class Meta:
+        permissions = (
+            ("ver_usuario", "Puede ver los usuarios disponibles"),
+        )

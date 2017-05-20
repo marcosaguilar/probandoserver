@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
-from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso
+from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso, estadoMantenimiento
 from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm, EditarMantenimientoForm, CrearMantenimientoForm
 
 # Create your views here.
@@ -9,7 +9,7 @@ from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm, Edi
 def index(request):
     return render(request, 'usuario/index.html')
 
-
+#--------------------------------------------RECURSO----------------------------------
 @permission_required('recurso.add_recurso', login_url='/login/')
 def crearRecurso_view(request):
     """crea un recurso en el sistema"""
@@ -74,13 +74,15 @@ def eliminarRecurso_view(request, id_recurso):
     return render(request,'recurso/eliminar_recurso.html', {'recurso_aux': var_recurso})
 
 
-
+#-----------------------------------------MANTENIMIENTO--------------------------
+#--------------------------------------------------------------------------------
+@permission_required('recurso.add_mantenimiento', login_url='/login/')
 def crearMantenimiento_view(request, id_recurso):
     if request.method == 'POST':
         form = CrearMantenimientoForm(request.POST)
         if form.is_valid():
             man = form.save(commit=False)
-            man.estado = "A realizar"
+            man.estado = estadoMantenimiento.objects.get(nombre="A realizar")
             man.cod_recurso = id_recurso
             man.save()
             var_recurso = recurso.objects.get(id=id_recurso)
@@ -97,6 +99,7 @@ def crearMantenimiento_view(request, id_recurso):
     return render(request,'recurso/crearMantenimiento_form.html', {'form': form})
 
 
+@permission_required('recurso.change_mantenimiento', login_url='/login/')
 def editarMantenimiento_view(request, id_mantenimiento):
     """permite modificar los atributos de un mantenimiento"""
     var = Mantenimiento.objects.get(id=id_mantenimiento)
@@ -112,22 +115,51 @@ def editarMantenimiento_view(request, id_mantenimiento):
     return render(request, 'recurso/editar_mantenimiento.html', {'form': form})
 
 
+@permission_required('recurso.ver_mantenimiento', login_url='/login/')
 def listarMantenimiento_view(request):
-    lista = Mantenimiento.objects.all().order_by('id')
+    """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
+    lista = []
+    for roldelusuario in request.user.rol.all():
+        tiporecursodelusuario = roldelusuario.tipoRecurso
+        nuevalista = Mantenimiento.objects.all().order_by('id')
+        print (nuevalista)
+        for elemento in nuevalista:
+            if(recurso.objects.get(id=elemento.cod_recurso).tipo == tiporecursodelusuario):
+                lista.append(elemento)
+
     contexto = {'mantenimientos': lista}
     return render(request, 'recurso/listar_mantenimiento.html', contexto)
 
+
+@permission_required('recurso.ver_mantenimiento', login_url='/login/')
 def listarRecursoMantenimiento_view(request):
-    lista = recurso.objects.all().order_by('id')
+    """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
+    lista = []
+    for roldelusuario in request.user.rol.all():
+        tiporecursodelusuario = roldelusuario.tipoRecurso
+        nuevalista = recurso.objects.filter(tipo=tiporecursodelusuario).order_by('id')
+        for elemento in nuevalista:
+            lista.append(elemento)
+    #lista = recurso.objects.all().order_by('id')
     contexto = {'recursos':lista}
     return render(request,'recurso/listar_rec_man.html', contexto)
 
+
+@permission_required('recurso.ver_mantenimiento', login_url='/login/')
 def listarAsignarMantenimiento_view(request):
-    lista = recurso.objects.all().order_by('id')
+    lista = []
+    for roldelusuario in request.user.rol.all():
+        tiporecursodelusuario = roldelusuario.tipoRecurso
+        nuevalista = recurso.objects.filter(tipo=tiporecursodelusuario).order_by('id')
+        for elemento in nuevalista:
+            lista.append(elemento)
+    #lista = recurso.objects.all().order_by('id')
     contexto = {'recursos': lista}
     return render(request, 'recurso/listar_asignar_man.html', contexto)
 
 
+#--------------------------------------TIPO RECURSO-----------------------
+#-------------------------------------------------------------------------
 @permission_required('recurso.add_tipo_de_recurso', login_url='/login/')
 def crearTipo_Recurso_view(request):
     """crea un tipo de recurso en el sistema"""

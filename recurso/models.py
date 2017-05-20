@@ -13,14 +13,25 @@ class tipoMantenimiento(models.Model):
         return '{}'.format(self.nombre)
 
 
+class estadoMantenimiento(models.Model):
+    nombre = models.CharField(max_length=50)
+    def __unicode__(self):
+        return '{}'.format(self.nombre)
+
+
 class Mantenimiento(models.Model):
     """contiene los datos del mantenimiento, como la fecha y la descripcion del mismo"""
-    estado = models.CharField(max_length=50, null=True, blank=True)#a realizar, en curso, terminado
+    estado = models.ForeignKey(estadoMantenimiento, null=True, blank=True, on_delete=models.CASCADE)
     tipo = models.ForeignKey(tipoMantenimiento, null=True, blank=True, on_delete=models.CASCADE)# preventivo o correctivo
     descripcion = models.CharField(max_length=100)# que le paso al recurso
     fecha_inicio = models.DateTimeField(null=True, blank=True)
     fecha_fin = models.DateTimeField(null=True, blank=True)
     cod_recurso = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        permissions = (
+            ("ver_mantenimiento", "Puede ver los mantenimientos disponibles"),
+        )
 
 
 class EstadoRecurso(models.Model):

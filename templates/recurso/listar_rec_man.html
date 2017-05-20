@@ -10,6 +10,7 @@
             <td>Tipo</td>
             <td>Tipo de Mantenimiento</td>
             <td>Estado de Mantenimiento</td>
+            <td>Descripcion de Mantenimiento</td>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
                 {% else  %}
                 <td>{{ lista.mantenimiento.tipo }}</td>
                 <td>{{ lista.mantenimiento.estado }}</td>
+                <td>{{ lista.mantenimiento.descripcion }}</td>
                 {% endif %}
             </tr>
             {% endfor %}

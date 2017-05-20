@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from forms import UsuarioForm, CrearRolForm, EditarRolForm, EditarUsuarioForm
 from models import rol, usuario
+from django.contrib.auth.decorators import permission_required
 
 
 # Create your views here.
@@ -10,6 +11,7 @@ def index(request):
     return render(request, 'usuario/index.html')
 
 
+@permission_required('usuario.add_rol', login_url='/login/')
 def crearRol_view(request):
     """crea un Rol en el sistema"""
     if request.method == 'POST':
@@ -24,12 +26,15 @@ def crearRol_view(request):
     return render(request, 'usuario/crearrol_form.html', {'form': form})
 
 
+@permission_required('usuario.ver_rol', login_url='/login/')
 def listarRol_view(request):
     """despliega una lista de los roles registrados en el sistema"""
     lista = rol.objects.all().order_by('id')
     contexto = {'roles': lista}
     return render(request, 'usuario/listar_rol.html', contexto)
 
+
+@permission_required('usuario.change_rol', login_url='/login/')
 def editarRol_view(request, id_rol):
     """permite modificar campos de un rol registrado en el sistema"""
     var_rol = rol.objects.get(id=id_rol)
@@ -42,6 +47,8 @@ def editarRol_view(request, id_rol):
         return redirect('usuario:listar_rol')
     return render(request, 'usuario/crearrol_form.html', {'form': form})
 
+
+@permission_required('usuario.delete_rol', login_url='/login/')
 def eliminarRol_view(request, id_rol):
     """elimina un rol registrado de la base de datos"""
     var_rol = rol.objects.get(id=id_rol)
@@ -51,8 +58,9 @@ def eliminarRol_view(request, id_rol):
     return render(request,'usuario/eliminar_rol.html', {'rol_aux': var_rol})
 
 
-
-
+#---------------------------USUARIO-----------------------------
+#---------------------------------------------------------------
+@permission_required('usuario.add_usuario', login_url='/login/')
 def crearUsuario_view(request):
     """crea un usuario en el sistema"""
     if request.method == 'POST':
@@ -79,6 +87,8 @@ def crearUsuario_view(request):
 
     return render(request,'usuario/usuario_form.html', {'form': form})
 
+
+@permission_required('usuario.ver_usuario', login_url='/login/')
 def listarUsuario_view(request):
     """despliega una lista de usuarios registrados en el sistema"""
     lista = usuario.objects.all().order_by('id')
@@ -86,6 +96,7 @@ def listarUsuario_view(request):
     return render(request,'usuario/listar_usuario.html', contexto)
 
 
+@permission_required('usuario.change_usuario', login_url='/login/')
 def editarUsuario_view(request, id_usuario):
     """permite modificar los atributos de un usuario"""
     var_usuario = usuario.objects.get(id=id_usuario)
@@ -117,6 +128,7 @@ def editarUsuario_view(request, id_usuario):
     return render(request, 'usuario/usuario_form.html', {'form': form})
 
 
+@permission_required('usuario.delete_usuario', login_url='/login/')
 def eliminarUsuario_view(request, id_usuario):
     """borra un usuario registrado de la base de datos del sistema"""
     var_usuario = usuario.objects.get(id=id_usuario)
