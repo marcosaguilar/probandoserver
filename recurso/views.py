@@ -1,7 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required, login_required
+<<<<<<< HEAD
 from forms import CrearRecursoForm, EditarRecursoForm, CrearMantenimientoForm, CrearTipoRecursoForm
 from models import EstadoRecurso, recurso, Mantenimiento, Tipo_de_recurso
+=======
+
+from forms import  CrearMantenimientoForm
+
+
+from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso
+from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm,EditarMantenimientoForm
+>>>>>>> 0f588a8d85236ba872404ed03523efd5e77f98a2
 # Create your views here.
 
 
@@ -95,7 +104,28 @@ def crearMantenimiento_view(request, id_recurso):
 
     return render(request,'recurso/crearMantenimiento_form.html', {'form': form})
 
+
+def editarMantenimiento_view(request, id_mantenimiento):
+    """permite modificar los atributos de un mantenimiento"""
+    var = Mantenimiento.objects.get(id=id_mantenimiento)
+    if request.method == 'GET':
+        form = EditarMantenimientoForm(instance=var)
+        #aux = form.save(commit=False)
+    else:
+        form = EditarMantenimientoForm(request.POST, instance=var)
+        #man = form.save(commit=False)
+        if form.is_valid():
+            form.save()
+            return redirect('recurso:listar_mantenimiento')
+    return render(request, 'recurso/editar_mantenimiento.html', {'form': form})
+
+
 def listarMantenimiento_view(request):
+    lista = Mantenimiento.objects.all().order_by('id')
+    contexto = {'mantenimientos': lista}
+    return render(request, 'recurso/listar_mantenimiento.html', contexto)
+
+def listarRecursoMantenimiento_view(request):
     lista = recurso.objects.all().order_by('id')
     contexto = {'recursos':lista}
     return render(request,'recurso/listar_rec_man.html', contexto)
