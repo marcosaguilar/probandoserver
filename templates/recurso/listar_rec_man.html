@@ -16,19 +16,35 @@
     <tbody>
         {% if recursos %}
             {% for lista in recursos %}
-            <tr>
-                <td>{{ lista.id }}</td>
-                <td>{{ lista.nombre }}</td>
-                <td>{{ lista.tipo.nombre }}</td>
-                {% if lista.mantenimiento is None %}
-                <td>ninguno</td>
-                <td>ninguno</td>
-                {% else  %}
-                <td>{{ lista.mantenimiento.tipo }}</td>
-                <td>{{ lista.mantenimiento.estado }}</td>
-                <td>{{ lista.mantenimiento.descripcion }}</td>
+                {% if lista.mantenimiento.get_fecha_fin <= tiempo and lista.mantenimiento %}
+                    <tr style="background-color:red">
+                        <td>{{ lista.id }}</td>
+                        <td>{{ lista.nombre }}</td>
+                        <td>{{ lista.tipo.nombre }}</td>
+                        {% if lista.mantenimiento is None %}
+                            <td>ninguno</td>
+                            <td>ninguno</td>
+                        {% else  %}
+                            <td>{{ lista.mantenimiento.tipo }}</td>
+                            <td>{{ lista.mantenimiento.estado }}</td>
+                            <td>{{ lista.mantenimiento.descripcion }}</td>
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>{{ lista.id }}</td>
+                        <td>{{ lista.nombre }}</td>
+                        <td>{{ lista.tipo.nombre }}</td>
+                        {% if lista.mantenimiento is None %}
+                            <td>ninguno</td>
+                            <td>ninguno</td>
+                        {% else  %}
+                            <td>{{ lista.mantenimiento.tipo }}</td>
+                            <td>{{ lista.mantenimiento.estado }}</td>
+                            <td>{{ lista.mantenimiento.descripcion }}</td>
+                        {% endif %}
+                    </tr>
                 {% endif %}
-            </tr>
             {% endfor %}
         {% else %}
             <h1>No hay registros de recursos</h1>

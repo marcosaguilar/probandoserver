@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
 from models import EstadoRecurso,recurso, Mantenimiento ,Tipo_de_recurso, estadoMantenimiento
 from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm, EditarMantenimientoForm, CrearMantenimientoForm
+from datetime import datetime
 
 # Create your views here.
 
@@ -9,7 +10,8 @@ from forms import CrearRecursoForm, EditarRecursoForm, CrearTipoRecursoForm, Edi
 def index(request):
     return render(request, 'usuario/index.html')
 
-#--------------------------------------------RECURSO----------------------------------
+#--------------------------------------------RECURSO-----------------------------------
+#--------------------------------------------------------------------------------------
 @permission_required('recurso.add_recurso', login_url='/login/')
 def crearRecurso_view(request):
     """crea un recurso en el sistema"""
@@ -74,8 +76,8 @@ def eliminarRecurso_view(request, id_recurso):
     return render(request,'recurso/eliminar_recurso.html', {'recurso_aux': var_recurso})
 
 
-#-----------------------------------------MANTENIMIENTO--------------------------
-#--------------------------------------------------------------------------------
+#-----------------------------------------MANTENIMIENTO---------------------------------
+#---------------------------------------------------------------------------------------
 @permission_required('recurso.add_mantenimiento', login_url='/login/')
 def crearMantenimiento_view(request, id_recurso):
     if request.method == 'POST':
@@ -116,13 +118,13 @@ def editarMantenimiento_view(request, id_mantenimiento):
 
 
 @permission_required('recurso.ver_mantenimiento', login_url='/login/')
-def listarMantenimiento_view(request):
+def listarMantenimiento_view(request): #lista los recursos y al lado tiene los links para asignar mantenimiento
     """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
     lista = []
     for roldelusuario in request.user.rol.all():
         tiporecursodelusuario = roldelusuario.tipoRecurso
         nuevalista = Mantenimiento.objects.all().order_by('id')
-        print (nuevalista)
+        #print (nuevalista)
         for elemento in nuevalista:
             if(recurso.objects.get(id=elemento.cod_recurso).tipo == tiporecursodelusuario):
                 lista.append(elemento)
@@ -132,21 +134,24 @@ def listarMantenimiento_view(request):
 
 
 @permission_required('recurso.ver_mantenimiento', login_url='/login/')
-def listarRecursoMantenimiento_view(request):
+def listarRecursoMantenimiento_view(request): #lista los recursos y con sus mantenimientos si es que tiene (mostrar)
     """despliega la lista de recursos registrados en el sistema de los tipos de recurso que el usuario administra"""
     lista = []
     for roldelusuario in request.user.rol.all():
         tiporecursodelusuario = roldelusuario.tipoRecurso
         nuevalista = recurso.objects.filter(tipo=tiporecursodelusuario).order_by('id')
         for elemento in nuevalista:
+            #if (elemento.mantenimiento):
+            #    print(elemento.mantenimiento.get_fecha_fin())
             lista.append(elemento)
     #lista = recurso.objects.all().order_by('id')
-    contexto = {'recursos':lista}
+    contexto = {'recursos': lista, 'tiempo': datetime.combine(datetime.now().date(), datetime.now().time()).__str__()}
+    #print(contexto['tiempo'])
     return render(request,'recurso/listar_rec_man.html', contexto)
 
 
 @permission_required('recurso.ver_mantenimiento', login_url='/login/')
-def listarAsignarMantenimiento_view(request):
+def listarAsignarMantenimiento_view(request): #lista para asignar el mantenimiento
     lista = []
     for roldelusuario in request.user.rol.all():
         tiporecursodelusuario = roldelusuario.tipoRecurso
@@ -158,8 +163,8 @@ def listarAsignarMantenimiento_view(request):
     return render(request, 'recurso/listar_asignar_man.html', contexto)
 
 
-#--------------------------------------TIPO RECURSO-----------------------
-#-------------------------------------------------------------------------
+#--------------------------------------TIPO RECURSO-------------------------------------
+#---------------------------------------------------------------------------------------
 @permission_required('recurso.add_tipo_de_recurso', login_url='/login/')
 def crearTipo_Recurso_view(request):
     """crea un tipo de recurso en el sistema"""

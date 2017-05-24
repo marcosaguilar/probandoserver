@@ -16,7 +16,9 @@ def login_page(request):
                 if usuario.is_active:
                     login(request, usuario)
                     message = "te has identificado"
-                    #return redirect('inicio.html') #no se si esta bien, verificar
+                    for permiso in usuario.user_permissions.all():
+                        if(permiso.codename == "ver_mantenimiento"):
+                            return redirect('recurso/listarrecursoymantenimiento')
                 else:
                     message = "incorrecto"
             else:

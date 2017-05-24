@@ -22,11 +22,14 @@ class estadoMantenimiento(models.Model):
 class Mantenimiento(models.Model):
     """contiene los datos del mantenimiento, como la fecha y la descripcion del mismo"""
     estado = models.ForeignKey(estadoMantenimiento, null=True, blank=True, on_delete=models.CASCADE)
-    tipo = models.ForeignKey(tipoMantenimiento, null=True, blank=True, on_delete=models.CASCADE)# preventivo o correctivo
+    tipo = models.ForeignKey(tipoMantenimiento, null=True, blank=True, on_delete=models.CASCADE)# preventivo, correctivo
     descripcion = models.CharField(max_length=100)# que le paso al recurso
     fecha_inicio = models.DateTimeField(null=True, blank=True)
     fecha_fin = models.DateTimeField(null=True, blank=True)
     cod_recurso = models.IntegerField(null=True, blank=True)
+
+    def get_fecha_fin(self):
+        return self.fecha_fin.__str__()
 
     class Meta:
         permissions = (
