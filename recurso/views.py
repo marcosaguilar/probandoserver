@@ -76,7 +76,7 @@ def eliminarRecurso_view(request, id_recurso):
 
 #-----------------------------------------MANTENIMIENTO--------------------------
 #--------------------------------------------------------------------------------
-@permission_required('recurso.add_mantenimiento', login_url='/login/')
+#@permission_required('recurso.add_mantenimiento', login_url='/login/')
 def crearMantenimiento_view(request, id_recurso):
     if request.method == 'POST':
         form = CrearMantenimientoForm(request.POST)
@@ -88,7 +88,7 @@ def crearMantenimiento_view(request, id_recurso):
             var_recurso = recurso.objects.get(id=id_recurso)
             form1 = EditarRecursoForm(instance=var_recurso)
             rec = form1.save(commit=False)
-            rec.mantenimiento = Mantenimiento.objects.get(cod_recurso=id_recurso)
+            rec.mantenimiento = Mantenimiento.objects.get(estado=1,cod_recurso=id_recurso)
             rec.save()
             return redirect('recurso:listar_rec_man')
 
