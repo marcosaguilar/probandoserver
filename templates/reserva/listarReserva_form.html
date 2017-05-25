@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Estado</td>
+            <td>Tipo de Mantenimiento</td>
+            <td>Descripcion</td>
+            <td>Fecha de inicio</td>
+            <td>Fecha de Finalizacion</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if reservas %}
+            {% for lista in reservas %}
+                <tr>
+                    <td>{{ lista.id }}</td>
+                    <td>{{ lista.recurso }}</td>
+                    <td>{{ lista.tipo_recurso }}</td>
+                    <td>{{ lista.fecha_inicio }}</td>
+                    <td>{{ lista.fecha_fin }}</td>
+                    <td>{{ lista.estado_reserva }}</td>
+                    <td><a href="{% url 'reserva:editar_reserva' lista.id %}">Editar</a></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de reservas</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

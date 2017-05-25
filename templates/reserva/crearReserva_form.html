@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    Recurso : {{ form.recurso }} </br>
+    Tipo de recurso : {{ form.tipo_recurso }} </br>
+    Usuario : {{ form.usuario }} </br>
+    Fecha de inicio : {{ form.fecha_inicio }} </br>
+    Fecha de fin : {{ form.fecha_fin }} </br>
+    Estado de reserva : {{ form.estado_reserva }} </br>
+
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

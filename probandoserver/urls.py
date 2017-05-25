@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^usuario/', include('usuario.urls',namespace="usuario")),
     url(r'^recurso/', include('recurso.urls',namespace="recurso")),
     url(r'^logout',logout_page, name="logout_page"),
+    url(r'^reserva/',include('reserva.urls',namespace="reserva")),
 ]

@@ -11,7 +11,7 @@ def index(request):
     return render(request, 'usuario/index.html')
 
 
-#@permission_required('usuario.add_rol', login_url='/login/')
+@permission_required('usuario.add_rol', login_url='/login/')
 def crearRol_view(request):
     """crea un Rol en el sistema"""
     if request.method == 'POST':
@@ -60,7 +60,7 @@ def eliminarRol_view(request, id_rol):
 
 #---------------------------USUARIO-----------------------------
 #---------------------------------------------------------------
-#@permission_required('usuario.add_usuario', login_url='/login/')
+@permission_required('usuario.add_usuario', login_url='/login/')
 def crearUsuario_view(request):
     """crea un usuario en el sistema"""
     if request.method == 'POST':
