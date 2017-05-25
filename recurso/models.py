@@ -76,3 +76,7 @@ class recurso(models.Model):
             ("ver_recurso", "Puede ver los recursos disponibles"),
         )
 
+
+    def __unicode__(self):
+        return '{}'.format(self.nombre)
+

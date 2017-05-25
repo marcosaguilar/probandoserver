@@ -45,6 +45,7 @@ class usuario(AbstractUser):
     def get_rol(self):
         return self.rol
 
+
     class Meta:
         permissions = (
             ("ver_usuario", "Puede ver los usuarios disponibles"),

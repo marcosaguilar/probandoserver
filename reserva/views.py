@@ -19,7 +19,7 @@ def crearReserva_view(request):
     else:
         form = CrearReservaForm()
 
-    return render(request, 'reserva/crearreserva_form.html', {'form': form})
+    return render(request, 'reserva/crearReserva_form.html', {'form': form})
 
 
 @permission_required('reserva.ver_reserva', login_url='/login/')
@@ -27,7 +27,7 @@ def listarReserva_view(request):
     """despliega una lista de reservas registradas en el sistema"""
     lista1 = reserva.objects.all().order_by('id')
     contexto1 = {'tipos': lista1}
-    return render(request,'recurso/listar_tiporecurso.html', contexto1)
+    return render(request,'reserva/listarReserva_form.html', contexto1)
 
 
 @permission_required('reserva.change_reserva', login_url='/login/')
