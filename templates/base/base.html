@@ -1,6 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.css'%}">
+
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -22,6 +27,8 @@
     {% block footer %}
 
     {% endblock %}
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
 
 </body>
 </html>

@@ -7,8 +7,9 @@
         <tr>
             <td>ID</td>
             <td>Nombre</td>
-            <td>Estado</td>
+            <td>Estado de Recurso</td>
             <td>Tipo</td>
+            <td>Estado de Mantenimiento</td>
         </tr>
     </thead>
     <tbody>
@@ -20,10 +21,16 @@
                 <td>{{ lista.nombre }}</td>
                 <td>{{ lista.estado }}</td>
                 <td>{{ lista.tipo.nombre }}</td>
-                {% if lista.mantenimiento is None %}
+                <td>{{ lista.mantenimiento.estado.nombre }}</td>
+                {% if lista.mantenimiento == None %}
                 <td><a href="{% url 'recurso:crear_mantenimiento' lista.id %}">Mantenimiento</a></td>
                 {% else %}
-                 <td><p>Ya tiene asignado un mantenimiento</p></td>
+                     {% if lista.mantenimiento.estado.nombre == "Terminado" or lista.mantenimiento.estado.nombre == "Cancelado" %}
+                        <td><a href="{% url 'recurso:crear_mantenimiento' lista.id %}">Mantenimiento</a></td>
+                     {% else %}
+                         <td><p>Ya tiene un mantenimiento en curso o a realizarse</p></td>
+                     {%endif %}
+
                 {%endif %}
             </tr>
             {% endfor %}

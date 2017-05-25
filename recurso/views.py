@@ -90,7 +90,7 @@ def crearMantenimiento_view(request, id_recurso):
             var_recurso = recurso.objects.get(id=id_recurso)
             form1 = EditarRecursoForm(instance=var_recurso)
             rec = form1.save(commit=False)
-            rec.mantenimiento = Mantenimiento.objects.get(cod_recurso=id_recurso)
+            rec.mantenimiento = Mantenimiento.objects.get(estado=1,cod_recurso=id_recurso)
             rec.save()
             return redirect('recurso:listar_rec_man')
 
@@ -185,8 +185,13 @@ def crearTipo_Recurso_view(request):
 @permission_required('recurso.ver_tipo_de_recurso', login_url='/login/')
 def listarTipoRecurso_view(request):
     """despliega una lista de tipos de recurso registrados en el sistema"""
-    lista1 = Tipo_de_recurso.objects.all().order_by('id')
-    contexto1 = {'tipos':lista1}
+    lista1 = []
+    for roldelusuario in request.user.rol.all():
+        if(roldelusuario.tipoRecurso):
+            tiporecursodelusuario = roldelusuario.tipoRecurso
+            lista1.append(tiporecursodelusuario)
+    #lista1 = Tipo_de_recurso.objects.all().order_by('id')
+    contexto1 = {'tipos': lista1}
     return render(request,'recurso/listar_tiporecurso.html', contexto1)
 
 
