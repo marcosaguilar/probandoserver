@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import permission_required
 def index(request):
     return render(request, 'usuario/index.html')
 
-
+#-------------------------------------ROL------------------------------------------
+#----------------------------------------------------------------------------------
 @permission_required('usuario.add_rol', login_url='/login/')
 def crearRol_view(request):
     """crea un Rol en el sistema"""
@@ -58,8 +59,8 @@ def eliminarRol_view(request, id_rol):
     return render(request,'usuario/eliminar_rol.html', {'rol_aux': var_rol})
 
 
-#---------------------------USUARIO-----------------------------
-#---------------------------------------------------------------
+#-------------------------------USUARIO-----------------------------------------
+#-------------------------------------------------------------------------------
 @permission_required('usuario.add_usuario', login_url='/login/')
 def crearUsuario_view(request):
     """crea un usuario en el sistema"""

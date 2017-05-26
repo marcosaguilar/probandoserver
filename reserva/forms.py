@@ -10,27 +10,27 @@ class CrearReservaForm(forms.ModelForm):
 
         fields = [
             'recurso',
-            'tipo_recurso',
-            'usuario',
+            #'tipo_recurso',
+            #'usuario',
             'fecha_inicio',
             'fecha_fin',
-            'estado_reserva',
+            #'estado_reserva',
         ]
         labels = {
             'recurso': 'Recurso reservado',
-            'tipo_recurso': 'Tipo del recurso reservado',
-            'usuario': 'Usuario que realiza la reserva',
+            #'tipo_recurso': 'Tipo del recurso reservado',
+            #'usuario': 'Usuario que realiza la reserva',
             'fecha_inicio': 'Fecha inicio',
             'fecha_fin': 'Fecha fin',
-            'estado_reserva': 'Estado de la reserva',
+            #'estado_reserva': 'Estado de la reserva',
         }
         widgets = {
             'recurso': forms.Select(),
-            'tipo_recurso': forms.Select(),
-            'usuario': forms.Select(),
+            #'tipo_recurso': forms.Select(),
+            #'usuario': forms.Select(),
             'fecha_inicio': forms.TextInput(),
             'fecha_fin': forms.TextInput(),
-            'estado_reserva': forms.Select(),
+            #'estado_reserva': forms.Select(),
         }
 
 
@@ -41,24 +41,24 @@ class EditarReservaForm(forms.ModelForm):
 
         fields = [
             'recurso',
-            'tipo_recurso',
-            'usuario',
+            #'tipo_recurso',
+            #'usuario',
             'fecha_inicio',
             'fecha_fin',
             'estado_reserva',
         ]
         labels = {
             'recurso': 'Recurso reservado',
-            'tipo_recurso': 'Tipo del recurso reservado',
-            'usuario': 'Usuario que realiza la reserva',
+            #'tipo_recurso': 'Tipo del recurso reservado',
+            #'usuario': 'Usuario que realiza la reserva',
             'fecha_inicio': 'Fecha inicio',
             'fecha_fin': 'Fecha fin',
             'estado_reserva': 'Estado de la reserva',
         }
         widgets = {
             'recurso': forms.Select(),
-            'tipo_recurso': forms.Select(),
-            'usuario': forms.Select(),
+            #'tipo_recurso': forms.Select(),
+            #'usuario': forms.Select(),
             'fecha_inicio': forms.TextInput(),
             'fecha_fin': forms.TextInput(),
             'estado_reserva': forms.Select(),

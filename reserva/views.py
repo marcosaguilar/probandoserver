@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
 from forms import CrearReservaForm, EditarReservaForm
-from models import reserva
+from models import reserva, estadoReserva
 
 # Create your views here.
 
@@ -13,9 +13,12 @@ def crearReserva_view(request):
     if request.method == 'POST':
         form = CrearReservaForm(request.POST)
         if form.is_valid():
+            form = form.save(commit=False)
+            form.tipo_recurso = form.recurso.tipo
+            form.usuario = request.user
+            form.estado_reserva = estadoReserva.objects.get(estado="A confirmar")
             form.save()
-            # return redirect('login_page')
-            # return redirect('usuario: index')
+            return redirect('/reserva/listarreserva')
     else:
         form = CrearReservaForm()
 
@@ -26,7 +29,7 @@ def crearReserva_view(request):
 def listarReserva_view(request):
     """despliega una lista de reservas registradas en el sistema"""
     lista1 = reserva.objects.all().order_by('id')
-    contexto1 = {'tipos': lista1}
+    contexto1 = {'reservas': lista1}
     return render(request,'reserva/listarReserva_form.html', contexto1)
 
 
