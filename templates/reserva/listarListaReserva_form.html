@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Fecha</td>
+            <td>Recurso</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if listas %}
+            {% for lista in listas %}
+                <tr>
+                    <td>{{ lista.id }}</td>
+                    <td>{{ lista.fecha }}</td>
+                    <td>{{ lista.recurso }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de reservas</h1>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

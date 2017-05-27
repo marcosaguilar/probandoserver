@@ -13,6 +13,7 @@
                 <td>Roles</td>
                 <td>Mantenimientos</td>
                 <td>Reservas</td>
+                <td>Lista de reservas</td>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +36,6 @@
                     <ul>
                         <li><a href="{%  url 'recurso:crear_tipo_recurso' %}">Crear</a></li>
                         <li><a href="{%  url 'recurso:listar_tiporecurso' %}">Eliminar</a></li>
-
                     </ul>
                 </td>
                 <td>
@@ -50,17 +50,19 @@
                         <li><a href="{%  url 'recurso:listar_asignar_man' %}">Asignar mantenimiento</a></li>
                         <li><a href="{%  url 'recurso:listar_mantenimiento' %}">Editar</a></li>
                         <li><a href="{%  url 'recurso:listar_rec_man' %}">Mostrar</a></li>
-
                     </ul>
                 </td>
                 <td>
                     <ul>
                         <li><a href="{%  url 'reserva:crear_reserva' %}">Crear</a></li>
                         <li><a href="{%  url 'reserva:listar_reserva' %}">Editar</a></li>
-
                     </ul>
                 </td>
-
+                <td>
+                    <ul>
+                        <li><a href="{%  url 'reserva:listar_lista_reserva' %}">Listar</a></li>
+                    </ul>
+                </td>
             </tr>
 
         </tbody>
