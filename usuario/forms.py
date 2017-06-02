@@ -18,6 +18,7 @@ class UsuarioForm(forms.ModelForm):
             'telefono',
             'direccion',
             'rol',
+            #'prioridad',
         ]
         labels = {
             'username': 'Nombre de usuario',
@@ -29,6 +30,7 @@ class UsuarioForm(forms.ModelForm):
             'telefono': 'Telefono',
             'direccion': 'Direccion',
             'rol': 'Roles',
+            #'prioridad': 'Prioridad Para Reserva',
         }
         widgets = {
             'username': forms.TextInput(),
@@ -40,6 +42,7 @@ class UsuarioForm(forms.ModelForm):
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput(),
             'rol': forms.CheckboxSelectMultiple(),
+            #'prioridad': forms.Select()
         }
 
 class EditarUsuarioForm(forms.ModelForm):
@@ -68,6 +71,7 @@ class EditarUsuarioForm(forms.ModelForm):
             'telefono': 'Telefono',
             'direccion': 'Direccion',
             'rol': 'Roles',
+            #'prioridad': 'Prioridad Para Reserva',
         }
         widgets = {
             'username': forms.TextInput(),
@@ -79,6 +83,7 @@ class EditarUsuarioForm(forms.ModelForm):
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput(),
             'rol': forms.CheckboxSelectMultiple(),
+            #'prioridad': forms.Select()
         }
 
 class CrearRolForm(forms.ModelForm):
@@ -89,16 +94,19 @@ class CrearRolForm(forms.ModelForm):
         fields = [
             'nombre',
             'permisos',
+            'prioridad',
             #'tipoRecurso',
         ]
         labels = {
             'nombre': 'Nombre del rol',
             'permisos': 'Permisos',
+            'prioridad': 'Prioridad Para Reserva',
             #'tipoRecurso':'Tipo de recurso',
         }
         widgets = {
             'nombre': forms.TextInput(),
             'permisos': forms.CheckboxSelectMultiple(),
+            'prioridad': forms.Select()
             #'tipoRecurso': forms.Select(),
         }
 
@@ -112,14 +120,17 @@ class EditarRolForm(forms.ModelForm):
             'nombre',
             'permisos',
             'tipoRecurso',
+            'prioridad',
         ]
         labels = {
             'nombre': 'Nombre del rol',
             'permisos': 'Permisos',
             'tipoRecurso':'Tipo de recurso',
+            'prioridad': 'Prioridad Para Reserva',
         }
         widgets = {
             'nombre': forms.TextInput(),
             'permisos': forms.CheckboxSelectMultiple(),
             'tipoRecurso': forms.Select(),
+            'prioridad': forms.Select(),
         }

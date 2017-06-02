@@ -31,6 +31,7 @@ class reserva(models.Model):
     estado_reserva = models.ForeignKey(estadoReserva, null=True, blank=True, on_delete=models.CASCADE)
     lista_reserva = models.ForeignKey(listaReserva, null=True, blank=True, on_delete=models.CASCADE)
     gano_reserva = models.NullBooleanField()
+    fecha = models.TextField(max_length=50, null=True)
 
     def __unicode__(self):
         return '{}'.format(self.id)

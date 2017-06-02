@@ -71,16 +71,27 @@ def crearUsuario_view(request):
             new_author.password = make_password(new_author.password)
             new_author.save()
             f._save_m2m()
+            nuevaprioridad = 0
             #guardar permisos de los roles en el usuario
             for unRol in new_author.rol.all():
                 nombrederol = unRol.nombre
-                nombredeusuario = new_author.username
+                nombredeusuario = new_author.username #deberia estar afuera del for, verificar
                 objetorol = rol.objects.get(nombre=nombrederol)
-                objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)
+                objetousuario = usuario.objects.get_by_natural_key(nombredeusuario)#deberia estar afuera del for, verificar
 
                 for objetopermiso in objetorol.permisos.all():
                     objetousuario.user_permissions.add(objetopermiso)
 
+                #guardar la prioridad del rol con prioridad mayor en el usuario
+                if (objetorol.prioridad):
+                    if (objetorol.prioridad.numero > objetousuario.prioridad):
+                        objetousuario.prioridad = objetorol.prioridad.get_numero()
+                        nuevaprioridad = objetousuario.prioridad
+
+            new_author = f.save(commit=False)
+            new_author.prioridad = nuevaprioridad
+            new_author.save()
+            f._save_m2m()
             return redirect('login_page')
         return redirect('usuario: index')
     else:

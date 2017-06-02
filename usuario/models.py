@@ -8,12 +8,23 @@ from recurso.models import Tipo_de_recurso
 # Create your models here.
 
 
+class prioridad(models.Model):
+    numero = models.IntegerField()
+
+    def __unicode__(self):
+        return '{}'.format(self.numero)
+
+    def get_numero(self):
+        return self.numero
+
+
 class rol(models.Model):
     """este modelo contiene los atributos de un rol"""
     nombre = models.CharField(max_length=50)
     #descripcion = models.CharField(max_length=100)
     permisos = models.ManyToManyField(Permission)
     tipoRecurso = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
+    prioridad = models.ForeignKey(prioridad, null=True, blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return '{}'.format(self.nombre)
@@ -38,6 +49,7 @@ class usuario(AbstractUser):
     telefono = models.CharField(max_length=12)
     direccion = models.CharField(max_length=50)
     rol = models.ManyToManyField(rol)
+    prioridad = models.IntegerField(null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','cedula']

@@ -99,9 +99,37 @@ def editarReserva_view(request, id_reserva):
     return render(request, 'reserva/crearReserva_form.html', {'form': form})
 
 
+#-------------------------------------LISTARESERVA-----------------------------------------
+#------------------------------------------------------------------------------------------
 def listarListaReserva_view(request):
     """despliega una lista de listas de reservas registradas en el sistema"""
     lista1 = listaReserva.objects.all().order_by('id')
     contexto1 = {'listas': lista1}
     return render(request,'reserva/listarListaReserva_form.html', contexto1)
+
+
+def calcular(request, id_lista):
+    seguir = True
+    while (seguir):
+        seguir = False
+        ganador= reserva.objects.first()
+        for reserva1 in reserva.objects.all():
+            if (reserva1.lista_reserva_id == id_lista and not reserva1.gano_reserva):#revisar gano reserva porque puede ser null or false mejor poner 0 1 2
+                seguir = True           #continua si alguno sin gano_reserva
+                if(reserva1.usuario.prioridad > ganador.usuario.prioridad):
+                    ganador = reserva1
+                elif(reserva1.usuario.prioridad == ganador.usuario.prioridad):
+                    if(reserva1.fecha < ganador.fecha):
+                        ganador = reserva1
+
+
+
+        for reserva1 in reserva.objects.all():
+            if (reserva1.lista_reserva_id == id_lista and not reserva1.lista.gano_reserva):#revisar gano reserva porque puede ser null or false
+                if (reserva1.id != ganador.id):
+                    if (reserva1.fecha_inicio and reserva1.fecha_fin):
+                        reserva1.gano_reserva = False
+
+
+    return render(request,'reserva/listarListaReserva_form.html')
 
