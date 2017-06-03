@@ -12,7 +12,7 @@ class MantenimientoTestCase(TestCase):
         tipomantenimiento1 = tipoMantenimiento.objects.create(nombre="Preventivo")
         estadomantenimiento1 = estadoMantenimiento.objects.create(nombre="A realizar")
         mantenimiento1 = Mantenimiento.objects.create(estado=estadomantenimiento1, tipo=tipomantenimiento1,
-                                                      descripcion="cambio de pantalla", fecha_inicio="2018-02-01 02:10:00+00:00",
+                                                      descripcion="cambio de pantalla", fecha_inicio="2018-02-01 02:10:00",
                                                       fecha_fin="2017-02-02 23:10:00", cod_recurso=recurso1.id)
         recurso2 = recurso.objects.create(nombre="Proyector789", estado=estadorecurso1, tipo=tiporecurso1, mantenimiento=mantenimiento1)
 
