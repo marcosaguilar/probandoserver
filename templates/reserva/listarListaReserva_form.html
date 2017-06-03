@@ -17,6 +17,7 @@
                     <td>{{ lista.id }}</td>
                     <td>{{ lista.fecha }}</td>
                     <td>{{ lista.recurso }}</td>
+                    <td><a href="{% url 'reserva:calcular_reserva' lista.id %}">Calcular</a></td>
                 </tr>
             {% endfor %}
         {% else %}

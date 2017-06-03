@@ -20,6 +20,8 @@ def crearReserva_view(request):
             form.tipo_recurso = form.recurso.tipo
             form.usuario = request.user
             form.estado_reserva = estadoReserva.objects.get(estado="A confirmar")
+            form.fechayhora = datetime.now().__str__()
+            form.gano_reserva = 0
             #ver si entra en lista o es directa
             #si es menos de 48 hs
             fechainicio = datetime.strptime(form.fecha_inicio, '%Y-%m-%d %H:%M') #convierte a tipo datetime
@@ -44,13 +46,13 @@ def crearReserva_view(request):
                                 break
                     if (puedereservar):
                         form.lista_reserva = listareserva
-                        form.gano_reserva = True
+                        form.gano_reserva = 2
                     else:
                         nosepudoreservar = True
                 #si no crea una lista y reserva directamente
                 else:
                     form.lista_reserva = listaReserva.objects.create(fecha=fechainicio.date().__str__(), recurso=form.recurso)
-                    form.gano_reserva = True
+                    form.gano_reserva = 2
             #si es mas de 48 hs
             else:
                 listaencontrada = False
@@ -108,28 +110,41 @@ def listarListaReserva_view(request):
     return render(request,'reserva/listarListaReserva_form.html', contexto1)
 
 
-def calcular(request, id_lista):
+def calcular_view(request, id_lista):
     seguir = True
     while (seguir):
         seguir = False
-        ganador= reserva.objects.first()
+        ganador = False
+
         for reserva1 in reserva.objects.all():
-            if (reserva1.lista_reserva_id == id_lista and not reserva1.gano_reserva):#revisar gano reserva porque puede ser null or false mejor poner 0 1 2
-                seguir = True           #continua si alguno sin gano_reserva
-                if(reserva1.usuario.prioridad > ganador.usuario.prioridad):
-                    ganador = reserva1
-                elif(reserva1.usuario.prioridad == ganador.usuario.prioridad):
-                    if(reserva1.fecha < ganador.fecha):
+            if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                ganador = reserva1
+                break
+
+        if (ganador):
+            for reserva1 in reserva.objects.all():
+                if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                    seguir = True           #continua si alguno sin gano_reserva
+                    if(reserva1.usuario.prioridad > ganador.usuario.prioridad):
                         ganador = reserva1
+                    elif(reserva1.usuario.prioridad == ganador.usuario.prioridad):
+                        print(reserva1.fechayhora)
+                        print(ganador.fechayhora)
+                        if(reserva1.fechayhora < ganador.fechayhora):
+                            ganador = reserva1
+            ganador.gano_reserva = 2
+            ganador.save()
+
+            for reserva1 in reserva.objects.all():
+                if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                    if (reserva1.id.__str__() != ganador.id.__str__()):
+                        if (reserva1.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and
+                                reserva1.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
+                                    reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and
+                                    reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__()):
+                            reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
+                            reserva1.save()
 
 
-
-        for reserva1 in reserva.objects.all():
-            if (reserva1.lista_reserva_id == id_lista and not reserva1.lista.gano_reserva):#revisar gano reserva porque puede ser null or false
-                if (reserva1.id != ganador.id):
-                    if (reserva1.fecha_inicio and reserva1.fecha_fin):
-                        reserva1.gano_reserva = False
-
-
-    return render(request,'reserva/listarListaReserva_form.html')
+    return render(request,'inicio.html')
 
