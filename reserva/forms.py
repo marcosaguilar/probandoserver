@@ -46,6 +46,7 @@ class EditarReservaForm(forms.ModelForm):
             'fecha_inicio',
             'fecha_fin',
             'estado_reserva',
+            'gano_reserva',
         ]
         labels = {
             'recurso': 'Recurso reservado',
@@ -54,6 +55,7 @@ class EditarReservaForm(forms.ModelForm):
             'fecha_inicio': 'Fecha inicio',
             'fecha_fin': 'Fecha fin',
             'estado_reserva': 'Estado de la reserva',
+            'gano_reserva': 'Estado de reserva'
         }
         widgets = {
             'recurso': forms.Select(),
@@ -62,4 +64,5 @@ class EditarReservaForm(forms.ModelForm):
             'fecha_inicio': forms.TextInput(),
             'fecha_fin': forms.TextInput(),
             'estado_reserva': forms.Select(),
+            'gano_reserva': forms.NumberInput(),
         }
