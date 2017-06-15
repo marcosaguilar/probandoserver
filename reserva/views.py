@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
-from forms import CrearReservaForm, EditarReservaForm
+from forms import CrearReservaForm, EditarReservaForm, CrearReservaGeneralForm
 from models import reserva, estadoReserva, listaReserva
 from datetime import datetime, timedelta
 from recurso.models import recurso
@@ -116,7 +116,7 @@ def calcular_view(request, id_lista):
         seguir = False
         ganador = False
 
-        for reserva1 in reserva.objects.all():
+        for reserva1 in reserva.objects.all():  #si la reserva se encuentra en la lista y esta sin determinar, es ganadora para empezar
             if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
                 ganador = reserva1
                 break
@@ -128,23 +128,87 @@ def calcular_view(request, id_lista):
                     if(reserva1.usuario.prioridad > ganador.usuario.prioridad):
                         ganador = reserva1
                     elif(reserva1.usuario.prioridad == ganador.usuario.prioridad):
-                        print(reserva1.fechayhora)
-                        print(ganador.fechayhora)
                         if(reserva1.fechayhora < ganador.fechayhora):
                             ganador = reserva1
             ganador.gano_reserva = 2
             ganador.save()
 
-            for reserva1 in reserva.objects.all():
+            for reserva1 in reserva.objects.all():  #pierden la reserva los que estan a la misma hora
                 if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
                     if (reserva1.id.__str__() != ganador.id.__str__()):
-                        if (reserva1.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and
+                        if (reserva1.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and   #el inicio entre el ganador
                                 reserva1.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
-                                    reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and
-                                    reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__()):
+                                reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and  #el final entre el ganador
+                                reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__() or
+                                ganador.fecha_inicio.__str__() >= reserva1.fecha_inicio and         #el ganador dentro
+                                ganador.fecha_fin.__str__() <= reserva1.fecha_fin.__str__()):
                             reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
                             reserva1.save()
 
-
     return render(request,'inicio.html')
+
+
+@permission_required('reserva.add_reserva', login_url='/login/')
+def crearReservaGeneral_view(request):
+    """crea una reserva general en el sistema"""
+    if request.method == 'POST':
+        form = CrearReservaGeneralForm(request.POST)
+        if form.is_valid():
+            nosepudoreservar = False
+            form = form.save(commit=False)
+            form.usuario = request.user
+            form.estado_reserva = estadoReserva.objects.get(estado="A confirmar")
+            form.fechayhora = datetime.now().__str__()
+            form.gano_reserva = 0
+            #comprobar si es directa
+            fechainicio = datetime.strptime(form.fecha_inicio, '%Y-%m-%d %H:%M') #convierte a tipo datetime
+            fechafinal = datetime.strptime(form.fecha_fin, '%Y-%m-%d %H:%M')
+            if(fechainicio.date().__str__() <= (datetime.now().date()+timedelta(days=2)).__str__()):
+                #for recursos del tipo de recurso
+                for recurso1 in recurso.objects.all(): #falta break y si no encontro
+                    if (recurso1.tipo == form.tipo_recurso):
+                        nosepudoreservar = False
+                        #busca lista de reserva de ese recurso y fecha igual
+                        listaencontrada = False
+                        for listareserva in listaReserva.objects.all():
+                            if (listareserva.recurso == recurso1 and fechainicio.date().__str__() == listareserva.fecha):
+                                listaencontrada = True
+                                break
+                        #si encuentra busca entre las reservas ganadoras y compara sus horas
+                        if(listaencontrada):
+                            puedereservar = True
+                            for reserva1 in reserva.objects.filter(lista_reserva=listareserva):
+                                if(reserva1.gano_reserva):
+                                    if(reserva1.fecha_inicio <= fechainicio.__str__() and
+                                    reserva1.fecha_fin >= fechainicio.__str__() or
+                                    reserva1.fecha_inicio <= fechafinal.__str__() and
+                                    reserva1.fecha_fin >= fechafinal.__str__()):
+                                        puedereservar = False
+                                        break
+                            if (puedereservar):
+                                form.lista_reserva = listareserva
+                                form.gano_reserva = 2
+                                break
+                            else:
+                                nosepudoreservar = True
+                        #si no crea una lista y reserva directamente
+                        else:
+                            form.lista_reserva = listaReserva.objects.create(fecha=fechainicio.date().__str__(), recurso=recurso1)
+                            form.gano_reserva = 2
+                            break
+                    else:
+                        nosepudoreservar = True
+            else:
+                nosepudoreservar = True
+            if (not nosepudoreservar):
+                form.recurso = recurso1
+                form.save()
+                return redirect('/reserva/listarreserva')
+            else:
+                #agregar pagina con mensaje de que no se pudo crear
+                return redirect('/reserva/listarreserva')
+    else:
+        form = CrearReservaGeneralForm()
+
+    return render(request, 'reserva/crearReserva_form.html', {'form': form})
 

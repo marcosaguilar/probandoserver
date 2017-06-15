@@ -3,11 +3,7 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-
-    Recurso : {{ form.recurso }} </br>
-    Fecha de inicio : {{ form.fecha_inicio }} </br>
-    Fecha de fin : {{ form.fecha_fin }} </br>
-
+    {{ form.as_p }}
     <button type="submit">Guardar</button>
 </form>
 {% endblock %}
