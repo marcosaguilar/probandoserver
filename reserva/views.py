@@ -148,3 +148,39 @@ def calcular_view(request, id_lista):
 
     return render(request,'inicio.html')
 
+#--------------------------------------------------CALCULO-CELERY-------------------------------
+#-----------------------------------------------------------------------------------------------
+def calcular_reserva(id_lista):
+    seguir = True
+    while (seguir):
+        seguir = False
+        ganador = False
+
+        for reserva1 in reserva.objects.all():
+            if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                ganador = reserva1
+                break
+
+        if (ganador):
+            for reserva1 in reserva.objects.all():
+                if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                    seguir = True           #continua si alguno sin gano_reserva
+                    if(reserva1.usuario.prioridad > ganador.usuario.prioridad):
+                        ganador = reserva1
+                    elif(reserva1.usuario.prioridad == ganador.usuario.prioridad):
+                        print(reserva1.fechayhora)
+                        print(ganador.fechayhora)
+                        if(reserva1.fechayhora < ganador.fechayhora):
+                            ganador = reserva1
+            ganador.gano_reserva = 2
+            ganador.save()
+
+            for reserva1 in reserva.objects.all():
+                if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
+                    if (reserva1.id.__str__() != ganador.id.__str__()):
+                        if (reserva1.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and
+                                reserva1.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
+                                    reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and
+                                    reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__()):
+                            reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
+                            reserva1.save()
