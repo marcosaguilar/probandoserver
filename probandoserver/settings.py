@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
+from __future__ import absolute_import  #################################################
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -40,9 +40,25 @@ INSTALLED_APPS = [
     'usuario',
     'recurso',
     'reserva',
-
+    #'django_celery_beat',
     #'django.contrib.admindocs',
 ]
+
+
+#------------------------------------------CELERY------------------------------------
+BROKER_URL = 'amqp://guest:guest@localhost//'
+
+from datetime import timedelta
+from celery.schedules import crontab
+
+CELERYBEAT_SCHEDULE = {
+    'calculo-reservas': {
+        'task': 'reserva.tasks.reservar',
+        'schedule': crontab(hour=01, minute=11),
+    }
+}
+
+CELERY_RESULT_BACKEND='rpc://'#'djcelery.backends.database:DatabaseBackend'
 
 #--------------------AUTH--------------------
 AUTH_USER_MODEL = 'usuario.usuario'

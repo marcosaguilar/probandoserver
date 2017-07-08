@@ -150,6 +150,12 @@ def calcular_view(request, id_lista):
 
 #--------------------------------------------------CALCULO-CELERY-------------------------------
 #-----------------------------------------------------------------------------------------------
+def calcular():
+    for reserva1 in reserva.objects.all():
+        if reserva1.fecha_inicio.__str__() <= (datetime.now().date()+timedelta(days=3)).__str__():
+            calcular_reserva(reserva1.id)
+
+
 def calcular_reserva(id_lista):
     seguir = True
     while (seguir):
