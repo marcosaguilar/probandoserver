@@ -26,6 +26,7 @@ class reserva(models.Model):
     recurso = models.ForeignKey(recurso, on_delete=models.CASCADE)
     tipo_recurso = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
     usuario = models.ForeignKey(usuario, null=True, blank=True, on_delete=models.CASCADE)
+
     fecha_inicio = models.TextField(max_length=50)
     fecha_fin = models.TextField(max_length=50)
     estado_reserva = models.ForeignKey(estadoReserva, null=True, blank=True, on_delete=models.CASCADE)

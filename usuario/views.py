@@ -3,7 +3,8 @@ from django.contrib.auth.hashers import make_password
 from forms import UsuarioForm, CrearRolForm, EditarRolForm, EditarUsuarioForm
 from models import rol, usuario
 from django.contrib.auth.decorators import permission_required
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 
@@ -63,11 +64,23 @@ def eliminarRol_view(request, id_rol):
 #-------------------------------------------------------------------------------
 @permission_required('usuario.add_usuario', login_url='/login/')
 def crearUsuario_view(request):
-    """crea un usuario en el sistema"""
+    """crea un usuario en el sistema y envia un correo de confirmacion al usuario"""
     if request.method == 'POST':
         f = UsuarioForm(request.POST)
         if f.is_valid():
+
+
+
+
             new_author = f.save(commit=False)
+
+            subject = 'Bienvenido al Sistema de Reserva de Recursos'
+            message = 'Su usuario ha sido confirmado.\nAhora puede logearse y empezar a utilizar el sistema.\n\nSaludos.\n\nEl equipo de desarrollo'
+            from_email = settings.EMAIL_HOST
+            to_list = [new_author.email]
+
+            send_mail(subject, message, from_email, to_list, fail_silently=False)
+
             new_author.password = make_password(new_author.password)
             new_author.save()
             f._save_m2m()
@@ -92,6 +105,9 @@ def crearUsuario_view(request):
             new_author.prioridad = nuevaprioridad
             new_author.save()
             f._save_m2m()
+
+
+
             return redirect('login_page')
         return redirect('usuario: index')
     else:
@@ -110,13 +126,22 @@ def listarUsuario_view(request):
 
 @permission_required('usuario.change_usuario', login_url='/login/')
 def editarUsuario_view(request, id_usuario):
-    """permite modificar los atributos de un usuario"""
+    """permite modificar los atributos de un usuario y envia un correo de confirmacion al usuario"""
     var_usuario = usuario.objects.get(id=id_usuario)
     if request.method == 'GET':
         form = EditarUsuarioForm(instance=var_usuario)
     else:
         f = EditarUsuarioForm(request.POST, instance=var_usuario)
         if f.is_valid():
+
+            subject = 'Modificacion'
+            message = 'Su usuario ha sido editado\n\nSaludos.\n\nEl equipo de desarrollo.'
+            from_email = settings.EMAIL_HOST
+            to_list = [var_usuario.email]
+
+            send_mail(subject, message, from_email, to_list, fail_silently=False)
+
+
             new_author = f.save(commit=False)
             new_author.password = make_password(new_author.password)
             new_author.save()
