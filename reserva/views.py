@@ -7,7 +7,110 @@ from recurso.models import recurso
 from django.conf import settings
 from django.core.mail import send_mail
 
+#--------------------------------------------Reportes-----------------------------------
+#--------------------------------------------------------------------------------------
 
+from forms import ReservaReporteForm
+from probandoserver.views import render_to_pdf
+from usuario.models import rol, usuario
+
+
+
+from django.http import HttpResponse
+
+class datos:
+    id = ""
+    nomrec = ""
+    tipo = ""
+    estado = ""
+    resp = ""
+    fecha =""
+    #nomuser = ""
+
+    #def __init__(self, a, b,c,d,e,f,g):
+
+    #    self.id = a
+    #    self.nomrec = b
+    #    self.tipo = c
+    #    self.estado = d
+    #    self.resp = e
+    #    self.fecha = f
+    #    self.nomuser = g
+
+    def __init__(self, a, b, c, d, f,g):
+        self.id = a
+        self.nomrec = b
+        self.tipo = c
+        self.estado = d
+        #self.resp = e
+        self.fecha = f
+        self.nomuser = g
+
+def encontrarresponsables(varreserva):
+    """genera una lista de usuarios que estan asociados a los tipos de recursos segun sus roles"""
+    lista =[]
+    listauser = usuario.objects.all()
+
+    for usuarios in listauser:
+        for rol in usuarios.rol.all():
+            if rol.tipoRecurso == varreserva.tipo_recurso:
+                lista.append(usuarios)
+    return lista
+
+
+def crear_reporte(request):
+    """genera los datos para el reporte de las reservas """
+
+    if request.method == 'POST':
+        form = ReservaReporteForm(request.POST)
+        if form.is_valid():
+            aux = form.save(commit=False)
+            lista1 = reserva.objects.all()
+            if aux.estado_reserva and aux.tipo_reserva:
+                lista1 = reserva.objects.filter(estado_reserva=aux.estado_reserva,tipo_reserva=aux.tipo_reserva).order_by('id')
+            elif aux.estado_reserva:
+                lista1 = reserva.objects.filter(estado_reserva=aux.estado_reserva).order_by('id')
+            elif aux.tipo_reserva:
+                lista1 = reserva.objects.filter(tipo_reserva=aux.tipo_reserva).order_by('id')
+
+            lista2 = []
+            if aux.fecha_fin and aux.fecha_inicio:
+
+
+                print ("entra en la lista ")
+
+
+                for reservas in lista1:
+                    if aux.fecha_inicio.__str__() <= reservas.fecha_inicio.__str__() and reservas.fecha_fin.__str__() <= aux.fecha_fin.__str__():
+                        lista2.append(reservas)
+            else:
+                lista2 = lista1
+
+            listafinal = []
+
+            for res in lista2:
+                #listauser = encontrarresponsables(res)
+                #for user in listauser:
+                    #var=datos(res.recurso.id,res.recurso.nombre,res.recurso.tipo,res.estado_reserva,user.nombres,res.fechayhora,res.usuario.nombres)
+                var = datos(res.recurso.id, res.recurso.nombre, res.recurso.tipo, res.estado_reserva,
+                            res.fechayhora, res.usuario.nombres)
+
+                listafinal.append(var)
+
+            for n in listafinal:
+                print(n.nomrec)
+
+            context = {'reservas': listafinal}
+            pdf = render_to_pdf('reserva/reporteReserva.html', context)
+            if pdf:
+                return HttpResponse(pdf, content_type='application/pdf')
+            return HttpResponse("No se encontraron los datos")
+
+        return HttpResponse("Formulario no valido")
+
+    else:
+        form = ReservaReporteForm()
+    return render(request, 'recurso/crearReporteRecurso.html', {'form': form})
 
 # Create your views here.
 

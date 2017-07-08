@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+    {% if usuarios %}
+<table>
+    <thead>
+        <tr>
+            <td>Nombres</td>
+            <td>Apellidos</td>
+            <td>Opcion</td>
+        </tr>
+    </thead>
+    <tbody>
+
+
+            {% for lista in usuarios %}
+                {% for listarol in rol %}
+            <tr>
+                <td>{{ lista.nombres }}</td>
+                <td>{{ lista.apellidos }}</td>
+                <td><a href="{% url 'recurso:crear_reporteconuser' lista.id listarol %}">Seleccionar</a></td>
+            </tr>
+                {% endfor %}
+            {% endfor %}
+
+    </tbody>
+</table>
+    {% else %}
+            No ha elegido ningun elemento de filtrado anterior
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <td><h4>Filtrado por Roles </h4></td>
+            <td><h4>Opcion</h4></td>
+        </tr>
+    </thead>
+    <tbody>
+        {% if roles %}
+            {% for lista in roles %}
+            <tr>
+                <td>{{ lista.nombre }}</td>
+                <td><a href="{% url 'recurso:reporte_conrol' lista.id %}">Seleccionar</a></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <h1>No hay registros de roles</h1>
+        {% endif %}
+    </tbody>
+</table>
+    <a href="{% url 'recurso:crear_reportesinuser' %}">Omitir</a>
+{% endblock %}

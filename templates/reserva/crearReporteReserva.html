@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <h1>Seleccione algunos filtros para el Reporte :</h1></br>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Confirmar</button>
+</form>
+{% endblock %}

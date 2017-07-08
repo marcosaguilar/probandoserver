@@ -2,6 +2,53 @@ from django import forms
 from models import recurso, Tipo_de_recurso, Mantenimiento
 
 
+class RecursoSinTipoReporteForm(forms.ModelForm):
+    """este formulario permite cargar obtener un dato para filtrado de un recurso"""
+
+    class Meta:
+        model = recurso
+
+        fields = [
+            'estado',
+
+
+        ]
+        labels = {
+            'estado': 'Estado del recurso',
+
+        }
+        widgets = {
+            'estado': forms.Select(),
+
+        }
+
+
+class RecursoReporteForm(forms.ModelForm):
+    """este formulario permite cargar los datos de filtrado de  recurso"""
+
+    class Meta:
+        model = recurso
+
+        fields = [
+            'estado',
+            'tipo',
+
+        ]
+        labels = {
+            'estado': 'Estado del recurso',
+            'tipo': 'Tipo de recurso',
+        }
+        widgets = {
+            'estado': forms.Select(),
+            'tipo': forms.Select(),
+        }
+
+
+
+
+
+
+
 class CrearRecursoForm(forms.ModelForm):
     """este formulario permite cargar los datos de recurso"""
 

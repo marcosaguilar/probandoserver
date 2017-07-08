@@ -27,13 +27,14 @@ class reserva(models.Model):
     tipo_recurso = models.ForeignKey(Tipo_de_recurso, null=True, blank=True, on_delete=models.CASCADE)
     usuario = models.ForeignKey(usuario, null=True, blank=True, on_delete=models.CASCADE)
 
-    fecha_inicio = models.TextField(max_length=50)
-    fecha_fin = models.TextField(max_length=50)
+    fecha_inicio = models.TextField(max_length=50, blank=True)
+    fecha_fin = models.TextField(max_length=50, blank=True)
     estado_reserva = models.ForeignKey(estadoReserva, null=True, blank=True, on_delete=models.CASCADE)
     lista_reserva = models.ForeignKey(listaReserva, null=True, blank=True, on_delete=models.CASCADE)
     gano_reserva = models.IntegerField() #0 indeterminado, 1 no, 2 si
     fechayhora = models.TextField(max_length=50, null=True)
 
+    tipo_reserva = models.TextField(max_length=50, null=True, blank=True)
     def __unicode__(self):
         return '{}'.format(self.id)
 
