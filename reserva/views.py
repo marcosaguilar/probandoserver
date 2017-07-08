@@ -4,6 +4,113 @@ from forms import CrearReservaForm, EditarReservaForm, CrearReservaGeneralForm
 from models import reserva, estadoReserva, listaReserva
 from datetime import datetime, timedelta
 from recurso.models import recurso
+from django.conf import settings
+from django.core.mail import send_mail
+
+#--------------------------------------------Reportes-----------------------------------
+#--------------------------------------------------------------------------------------
+
+from forms import ReservaReporteForm
+from probandoserver.views import render_to_pdf
+from usuario.models import rol, usuario
+
+
+
+from django.http import HttpResponse
+
+class datos:
+    id = ""
+    nomrec = ""
+    tipo = ""
+    estado = ""
+    resp = ""
+    fecha =""
+    #nomuser = ""
+
+    #def __init__(self, a, b,c,d,e,f,g):
+
+    #    self.id = a
+    #    self.nomrec = b
+    #    self.tipo = c
+    #    self.estado = d
+    #    self.resp = e
+    #    self.fecha = f
+    #    self.nomuser = g
+
+    def __init__(self, a, b, c, d, f,g):
+        self.id = a
+        self.nomrec = b
+        self.tipo = c
+        self.estado = d
+        #self.resp = e
+        self.fecha = f
+        self.nomuser = g
+
+def encontrarresponsables(varreserva):
+    """genera una lista de usuarios que estan asociados a los tipos de recursos segun sus roles"""
+    lista =[]
+    listauser = usuario.objects.all()
+
+    for usuarios in listauser:
+        for rol in usuarios.rol.all():
+            if rol.tipoRecurso == varreserva.tipo_recurso:
+                lista.append(usuarios)
+    return lista
+
+
+def crear_reporte(request):
+    """genera los datos para el reporte de las reservas """
+
+    if request.method == 'POST':
+        form = ReservaReporteForm(request.POST)
+        if form.is_valid():
+            aux = form.save(commit=False)
+            lista1 = reserva.objects.all()
+            if aux.estado_reserva and aux.tipo_reserva:
+                lista1 = reserva.objects.filter(estado_reserva=aux.estado_reserva,tipo_reserva=aux.tipo_reserva).order_by('id')
+            elif aux.estado_reserva:
+                lista1 = reserva.objects.filter(estado_reserva=aux.estado_reserva).order_by('id')
+            elif aux.tipo_reserva:
+                lista1 = reserva.objects.filter(tipo_reserva=aux.tipo_reserva).order_by('id')
+
+            lista2 = []
+            if aux.fecha_fin and aux.fecha_inicio:
+
+
+                print ("entra en la lista ")
+
+
+                for reservas in lista1:
+                    if aux.fecha_inicio.__str__() <= reservas.fecha_inicio.__str__() and reservas.fecha_fin.__str__() <= aux.fecha_fin.__str__():
+                        lista2.append(reservas)
+            else:
+                lista2 = lista1
+
+            listafinal = []
+
+            for res in lista2:
+                #listauser = encontrarresponsables(res)
+                #for user in listauser:
+                    #var=datos(res.recurso.id,res.recurso.nombre,res.recurso.tipo,res.estado_reserva,user.nombres,res.fechayhora,res.usuario.nombres)
+                var = datos(res.recurso.id, res.recurso.nombre, res.recurso.tipo, res.estado_reserva,
+                            res.fechayhora, res.usuario.nombres)
+
+                listafinal.append(var)
+
+            for n in listafinal:
+                print(n.nomrec)
+
+            context = {'reservas': listafinal}
+            pdf = render_to_pdf('reserva/reporteReserva.html', context)
+            if pdf:
+                return HttpResponse(pdf, content_type='application/pdf')
+            return HttpResponse("No se encontraron los datos")
+
+        return HttpResponse("Formulario no valido")
+
+    else:
+        form = ReservaReporteForm()
+    return render(request, 'recurso/crearReporteRecurso.html', {'form': form})
 
 # Create your views here.
 
@@ -97,6 +204,18 @@ def editarReserva_view(request, id_reserva):
         form = EditarReservaForm(request.POST, instance=var_reserva)
         if form.is_valid():
             form.save()
+            print (var_reserva.estado_reserva)
+            if var_reserva.estado_reserva.estado == "Cancelado":
+
+                subject = 'Reserva cancelada'
+                message = 'Su reserva ha sido cancelada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                from_email = settings.EMAIL_HOST
+                print (var_reserva.usuario.email)
+                to_list = [var_reserva.usuario.email]
+                send_mail(subject, message, from_email, to_list, fail_silently=False)
+
+
+
         return redirect('reserva:listar_reserva')
     return render(request, 'reserva/crearReserva_form.html', {'form': form})
 
@@ -133,17 +252,30 @@ def calcular_view(request, id_lista):
             ganador.gano_reserva = 2
             ganador.save()
 
+            subject = 'Reserva Confirmada'
+            message = 'Su reserva ha sido confirmada.\n\nSaludos.\n\nEl equipo de desarrollo'
+            from_email = settings.EMAIL_HOST
+            to_list = [ganador.usuario.email]
+
+            send_mail(subject, message, from_email, to_list, fail_silently=False)
+
             for reserva1 in reserva.objects.all():  #pierden la reserva los que estan a la misma hora
                 if (reserva1.lista_reserva_id.__str__() == id_lista.__str__() and reserva1.gano_reserva == 0):
-                    if (reserva1.id.__str__() != ganador.id.__str__()):
-                        if (reserva1.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and   #el inicio entre el ganador
-                                reserva1.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
-                                reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and  #el final entre el ganador
-                                reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__() or
-                                ganador.fecha_inicio.__str__() >= reserva1.fecha_inicio and         #el ganador dentro
-                                ganador.fecha_fin.__str__() <= reserva1.fecha_fin.__str__()):
-                            reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
-                            reserva1.save()
+                    perdedor=reserva1
+                    if (perdedor.id.__str__() != ganador.id.__str__()):
+                        if (perdedor.fecha_inicio.__str__() >= ganador.fecha_inicio.__str__() and   #el inicio entre el ganador
+                                perdedor.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
+                                perdedor.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and  #el final entre el ganador
+                                perdedor.fecha_fin.__str__() <= ganador.fecha_fin.__str__() or
+                                perdedor.fecha_inicio.__str__() >= reserva1.fecha_inicio and         #el ganador dentro
+                                perdedor.fecha_fin.__str__() <= reserva1.fecha_fin.__str__()):
+                            perdedor.gano_reserva = 1   #perdieron los que compiten con el ganador
+                            perdedor.save()
+                            subject = 'Reserva cancelada'
+                            message = 'Su reserva ha sido cancelada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                            from_email = settings.EMAIL_HOST
+                            to_list = [perdedor.usuario.email]
+                            send_mail(subject, message, from_email, to_list, fail_silently=False)
 
     return render(request,'inicio.html')
 

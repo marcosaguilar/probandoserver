@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from views import calcular_view, crearReserva_view, listarReserva_view, editarReserva_view, listarListaReserva_view, crearReservaGeneral_view
-
+from views import crear_reporte
 urlpatterns = [
     url(r'^crearreserva$', crearReserva_view, name='crear_reserva'),
     url(r'^listarreserva$', listarReserva_view, name='listar_reserva'),
@@ -8,5 +8,9 @@ urlpatterns = [
     url(r'^listarlistareserva$', listarListaReserva_view, name='listar_lista_reserva'),
     url(r'^calcularlistareserva/(?P<id_lista>\d+)/$', calcular_view, name='calcular_reserva'),
     url(r'^crearreservageneral$', crearReservaGeneral_view, name='crear_reservageneral'),
+
+
+    url(r'^crearreporte$', crear_reporte, name='crear_reporte'),
+
 ]
 

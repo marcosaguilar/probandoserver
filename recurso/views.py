@@ -7,6 +7,135 @@ from datetime import datetime
 # Create your views here.
 
 
+
+#--------------------------------------------Reportes-----------------------------------
+#--------------------------------------------------------------------------------------
+
+from forms import RecursoReporteForm, RecursoSinTipoReporteForm
+from probandoserver.views import render_to_pdf
+from usuario.models import rol, usuario
+
+
+
+from django.http import HttpResponse
+
+def reporte_listaroles(request):
+    """genera una lista de los roles que administran los recursos del sistema"""
+
+    lista = rol.objects.exclude(tipoRecurso=None)
+    contexto = {'roles': lista}
+    return render(request, 'recurso/reporteRoles.html', contexto)
+
+
+def reporte_conrol(request, id_rol):
+    """ genera una lista de usuarios que tienen el rol seleccionado"""
+    lista = []
+    listarol = []
+    listarol.append(id_rol)
+    if id_rol:
+        asignado =rol.objects.get(id=id_rol)
+        for usuarios in usuario.objects.all():
+            for roles in usuarios.rol.all():
+                if roles.id == asignado.id:
+                    lista.append(usuarios)
+
+    return render(request, 'recurso/reporteUsuarios.html', {'usuarios': lista, 'rol':listarol})
+
+class datos:
+    id = ""
+    nombre = ""
+    tipo = ""
+    estado = ""
+    responsable = ""
+    def __init__(self, a, b,c,d,e):
+        self.id = a
+        self.nombre = b
+        self.tipo = c
+        self.estado = d
+        self.responsable = e
+
+
+def crear_reporteconuser(request,id_usuario,id_rol):
+    """ genera los datos para el reporte considerando un responsable el recurso en el filtrado"""
+    lista1 =[]
+    lista2 = []
+    if request.method == 'POST':
+        form = RecursoSinTipoReporteForm(request.POST)
+        if form.is_valid():
+            aux = form.save(commit=False)
+            varrol = rol.objects.get(id=id_rol)
+
+
+            if aux.estado:
+                lista1 = recurso.objects.filter(tipo=varrol.tipoRecurso,estado=aux.estado).order_by('id')
+            else:
+                lista1 = recurso.objects.filter(tipo=varrol.tipoRecurso)
+
+            listafinal = []
+
+            usuarios = usuario.objects.get(id=id_usuario)
+            for recursos in lista1:
+                aux = datos(recursos.id,recursos.nombre,recursos.tipo,recursos.estado,usuarios.nombres)
+                listafinal.append(aux)
+
+            context = {'recursos': listafinal}
+            pdf = render_to_pdf('recurso/reporteRecurso.html', context)
+            if pdf:
+                return HttpResponse(pdf, content_type='application/pdf')
+            return HttpResponse("No se encontraron los datos")
+
+        return HttpResponse("Formulario no valido")
+
+    else:
+        form = RecursoSinTipoReporteForm()
+    return render(request, 'recurso/crearReporteRecurso.html', {'form': form})
+
+
+def crear_reportesinuser(request):
+    """ genera los datos para el reporte considerando el estado y tipo de recurso"""
+
+    if request.method == 'POST':
+        form = RecursoReporteForm(request.POST)
+
+        if form.is_valid():
+            aux = form.save(commit=False)
+            lista1 = []
+            if aux.estado and aux.tipo:
+                lista1 = recurso.objects.filter(tipo=aux.tipo,estado=aux.estado).order_by('id')
+            elif aux.estado:
+                lista1 = recurso.objects.filter(estado=aux.estado).order_by('id')
+            elif aux.tipo:
+                lista1 = recurso.objects.filter(tipo=aux.tipo).order_by('id')
+            else:
+                lista1 = recurso.objects.all().order_by('id')
+
+            listafinal = []
+            listaaux = usuario.objects.all()
+
+            for recursos in lista1:
+                for usuarios in listaaux:
+                    for rol in usuarios.rol.all():
+                        if recursos.tipo == rol.tipoRecurso:
+                            var = datos(recursos.id, recursos.nombre, recursos.tipo, recursos.estado, usuarios.nombres)
+                            listafinal.append(var)
+
+            context = {'recursos': listafinal}
+            pdf = render_to_pdf('recurso/reporteRecurso.html', context)
+            if pdf:
+                return HttpResponse(pdf, content_type='application/pdf')
+            return HttpResponse("No se encontraron los datos")
+
+        return HttpResponse("Formulario no valido")
+
+    else:
+        form = RecursoReporteForm()
+    return render(request, 'recurso/crearReporteRecurso.html', {'form': form})
+
+
+
+
+
+
 def index(request):
     return render(request, 'usuario/index.html')
 
