@@ -15,8 +15,8 @@ from probandoserver.views import render_to_pdf
 from usuario.models import rol, usuario
 
 
-
 from django.http import HttpResponse
+
 
 class datos:
     id = ""
@@ -129,6 +129,7 @@ def crearReserva_view(request):
             form.estado_reserva = estadoReserva.objects.get(estado="A confirmar")
             form.fechayhora = datetime.now().__str__()
             form.gano_reserva = 0
+            form.tipo_reserva = "especifica"
             #ver si entra en lista o es directa
             #si es menos de 48 hs
             fechainicio = datetime.strptime(form.fecha_inicio, '%Y-%m-%d %H:%M') #convierte a tipo datetime
@@ -154,12 +155,28 @@ def crearReserva_view(request):
                     if (puedereservar):
                         form.lista_reserva = listareserva
                         form.gano_reserva = 2
+                        form.estado_reserva = estadoReserva.objects.filter(estado="Reservado")[0]
+
+                        subject = 'Reserva Confirmada'
+                        message = 'Su reserva ha sido confirmada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                        from_email = settings.EMAIL_HOST
+                        to_list = [request.user.email]
+
+                        send_mail(subject, message, from_email, to_list, fail_silently=False)
                     else:
                         nosepudoreservar = True
                 #si no crea una lista y reserva directamente
                 else:
                     form.lista_reserva = listaReserva.objects.create(fecha=fechainicio.date().__str__(), recurso=form.recurso)
                     form.gano_reserva = 2
+                    form.estado_reserva = estadoReserva.objects.filter(estado="Reservado")[0]
+
+                    subject = 'Reserva Confirmada'
+                    message = 'Su reserva ha sido confirmada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                    from_email = settings.EMAIL_HOST
+                    to_list = [request.user.email]
+
+                    send_mail(subject, message, from_email, to_list, fail_silently=False)
             #si es mas de 48 hs
             else:
                 listaencontrada = False
@@ -250,6 +267,7 @@ def calcular_view(request, id_lista):
                         if(reserva1.fechayhora < ganador.fechayhora):
                             ganador = reserva1
             ganador.gano_reserva = 2
+            ganador.estado_reserva = estadoReserva.objects.filter(estado="Reservado")[0]
             ganador.save()
 
             subject = 'Reserva Confirmada'
@@ -270,6 +288,7 @@ def calcular_view(request, id_lista):
                                 perdedor.fecha_inicio.__str__() >= reserva1.fecha_inicio and         #el ganador dentro
                                 perdedor.fecha_fin.__str__() <= reserva1.fecha_fin.__str__()):
                             perdedor.gano_reserva = 1   #perdieron los que compiten con el ganador
+                            perdedor.estado_reserva=estadoReserva.objects.filter(estado="Cancelado")[0]
                             perdedor.save()
                             subject = 'Reserva cancelada'
                             message = 'Su reserva ha sido cancelada.\n\nSaludos.\n\nEl equipo de desarrollo'
@@ -293,6 +312,7 @@ def crearReservaGeneral_view(request):
             form.estado_reserva = estadoReserva.objects.get(estado="A confirmar")
             form.fechayhora = datetime.now().__str__()
             form.gano_reserva = 0
+            form.tipo_reserva = "general"
             #comprobar si es directa
             fechainicio = datetime.strptime(form.fecha_inicio, '%Y-%m-%d %H:%M') #convierte a tipo datetime
             fechafinal = datetime.strptime(form.fecha_fin, '%Y-%m-%d %H:%M')
@@ -321,6 +341,13 @@ def crearReservaGeneral_view(request):
                             if (puedereservar):
                                 form.lista_reserva = listareserva
                                 form.gano_reserva = 2
+                                form.estado_reserva = estadoReserva.objects.filter(estado="Reservado")[0]
+                                subject = 'Reserva Confirmada'
+                                message = 'Su reserva ha sido confirmada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                                from_email = settings.EMAIL_HOST
+                                to_list = [form.usuario.email]
+
+                                send_mail(subject, message, from_email, to_list, fail_silently=False)
                                 break
                             else:
                                 nosepudoreservar = True
@@ -328,6 +355,13 @@ def crearReservaGeneral_view(request):
                         else:
                             form.lista_reserva = listaReserva.objects.create(fecha=fechainicio.date().__str__(), recurso=recurso1)
                             form.gano_reserva = 2
+                            form.estado_reserva = estadoReserva.objects.filter(estado="Reservado")[0]
+                            subject = 'Reserva Confirmada'
+                            message = 'Su reserva ha sido confirmada.\n\nSaludos.\n\nEl equipo de desarrollo'
+                            from_email = settings.EMAIL_HOST
+                            to_list = [form.usuario.email]
+
+                            send_mail(subject, message, from_email, to_list, fail_silently=False)
                             break
                     else:
                         nosepudoreservar = True
@@ -386,6 +420,6 @@ def calcular_reserva(id_lista):
                                 reserva1.fecha_inicio.__str__() <= ganador.fecha_fin.__str__() or
                                     reserva1.fecha_fin.__str__() >= ganador.fecha_inicio.__str__() and
                                     reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__()):
-                            reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
+                            reserva1.gano_reserva = 1   #perdieron los que compiten con el ganado
                             reserva1.save()
 
