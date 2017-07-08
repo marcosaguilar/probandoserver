@@ -147,7 +147,7 @@ def calcular_view(request, id_lista):
 
     return render(request,'inicio.html')
 
-<<<<<<< HEAD
+
 
 @permission_required('reserva.add_reserva', login_url='/login/')
 def crearReservaGeneral_view(request):
@@ -213,7 +213,7 @@ def crearReservaGeneral_view(request):
 
     return render(request, 'reserva/crearReserva_form.html', {'form': form})
 
-=======
+
 #--------------------------------------------------CALCULO-CELERY-------------------------------
 #-----------------------------------------------------------------------------------------------
 def calcular():
@@ -256,4 +256,4 @@ def calcular_reserva(id_lista):
                                     reserva1.fecha_fin.__str__() <= ganador.fecha_fin.__str__()):
                             reserva1.gano_reserva = 1   #perdieron los que compiten con el ganador
                             reserva1.save()
->>>>>>> developerMA
+
