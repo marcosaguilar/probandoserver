@@ -384,7 +384,7 @@ def crearReservaGeneral_view(request):
 #-----------------------------------------------------------------------------------------------
 def calcular():
     for reserva1 in reserva.objects.all():
-        if reserva1.fecha_inicio.__str__() <= (datetime.now().date()+timedelta(days=3)).__str__():
+        if reserva1.fecha_inicio.__str__() <= (datetime.now().date()+timedelta(days=2)).__str__():
             calcular_reserva(reserva1.id)
 
 
